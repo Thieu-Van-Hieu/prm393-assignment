@@ -1,0 +1,54 @@
+# 1. Bỏ qua toàn bộ mọi thứ mặc định
+*
+!*/
+
+# 2. Giữ lại các cấu hình Git và cấu trúc gốc
+!.gitignore
+!README.md
+
+# 3. Bỏ qua thư mục docs và các file liên quan
+!docs/
+!docs/**
+
+# 4. WHITELIST CHO FLUTTER FRONTEND (my_fschool_frontend)
+!code/my_fschool_frontend/
+code/my_fschool_frontend/*
+
+# Giữ lại các tệp tin cấu hình cốt lõi ở thư mục gốc frontend
+!code/my_fschool_frontend/pubspec.yaml
+!code/my_fschool_frontend/pubspec.lock
+!code/my_fschool_frontend/analysis_options.yaml
+!code/my_fschool_frontend/README.md
+
+# Giữ lại mã nguồn và tài nguyên tự định nghĩa
+!code/my_fschool_frontend/lib/
+!code/my_fschool_frontend/lib/**
+!code/my_fschool_frontend/assets/
+!code/my_fschool_frontend/assets/**
+
+# Giữ lại cấu hình nền tảng (Platform Folders)
+!code/my_fschool_frontend/android/
+!code/my_fschool_frontend/android/**
+!code/my_fschool_frontend/web/
+!code/my_fschool_frontend/web/**
+
+# Loại trừ các file build và file tạm sinh ra bên trong Android/Web (Dù đã whitelist ở trên)
+code/my_fschool_frontend/android/.gradle/
+code/my_fschool_frontend/android/app/build/
+code/my_fschool_frontend/android/local.properties
+code/my_fschool_frontend/android/**/.bundle/
+code/my_fschool_frontend/android/**/GeneratedPluginRegistrant.java
+
+# 4. WHITELIST CHO POSTGRESQL DATABASE (my_fschool_database)
+!code/my_fschool_database/
+code/my_fschool_database/*
+!code/my_fschool_database/init.sql
+
+# 5. WHITELIST CHO SPRING BACKEND (my_fschool_backend)
+!code/my_fschool_backend/
+code/my_fschool_backend/*
+!code/my_fschool_backend/src/
+!code/my_fschool_backend/src/**
+!code/my_fschool_backend/pom.xml
+!code/my_fschool_backend/mvnw
+!code/my_fschool_backend/mvnw.cmd
