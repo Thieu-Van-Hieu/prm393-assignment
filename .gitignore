@@ -43,6 +43,7 @@ code/my_fschool_frontend/android/**/GeneratedPluginRegistrant.java
 !code/my_fschool_database/
 code/my_fschool_database/*
 !code/my_fschool_database/init.sql
+!code/my_fschool_database/data.sql
 
 # 5. WHITELIST CHO SPRING BACKEND (my_fschool_backend)
 !code/my_fschool_backend/
