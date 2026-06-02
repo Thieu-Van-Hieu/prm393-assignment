@@ -16,3 +16,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+speedsms:
+  access-token: ${SPEEDSMS_ACCESS_TOKEN}
+  device-id: ${SPEEDSMS_DEVICE_ID} # Nếu xài tài khoản thử nghiệm chưa duyệt Brandname thì cứ để trống ""
