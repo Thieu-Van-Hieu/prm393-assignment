@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_fschool_frontend/layout/main_layout.dart';
 import 'package:my_fschool_frontend/route/app_router_config.dart';
+import 'package:my_fschool_frontend/screen/login_screen.dart';
 import 'package:my_fschool_frontend/util/session_manager.dart';
 
 class AppRouter {
@@ -9,10 +9,7 @@ class AppRouter {
     initialLocation: '/login',
     routes: [
       // 1. Màn hình Đăng nhập (Nằm ngoài Layout chung)
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => Text('Login Screen'),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
 
       // 2. TỰ ĐỘNG SINH ROUTE CHO CÁC TRANG CÓ LAYOUT (HEADER + NAVBAR)
       ShellRoute(
