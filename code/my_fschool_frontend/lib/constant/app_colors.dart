@@ -25,7 +25,7 @@ class AppColors {
 
   // 4. MÀU TRẠNG THÁI ĐIỂM DANH & HỌC TẬP (STATUS COLORS)
   static const Color statusAttendedBg = Color(0xFFE6F4EA);
-  static const Color statusAttendedText = Color(0xFF137333);
+  static const Color statusAttendedText = Color(0xFF72BB53);
 
   static const Color statusAbsentBg = Color(0xFFFCE8E6);
   static const Color statusAbsentText = Color(0xFFC5221F);
