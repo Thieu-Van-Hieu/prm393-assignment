@@ -10,14 +10,39 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: ^1.0.8
+  
+  # GO ROUTER
+  go_router: ^17.2.3
+  
+  # HTTP
+  dio: ^5.9.2
+  
+  # MAPPABLE
+  dart_mappable: ^4.6.0
+
+  # HOOKS
+  flutter_hooks: ^0.21.3+1
+  
+  # SECURE STORAGE
+  flutter_secure_storage: ^10.3.1
+  
+  # DOTENV
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+  # BUILD RUNNER
+  build_runner: ^2.4.13
+
+  # MAPPABLE
+  dart_mappable_builder: ^4.6.0
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/fpt_logo.png
+    - .env
