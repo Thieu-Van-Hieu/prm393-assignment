@@ -39,13 +39,29 @@ class AuthApi {
     }
   }
 
-  // Hàm helper bóc tách thông điệp lỗi trả về từ Spring Boot (thường nằm trong map 'message')
-  String _getErrorMessage(DioException e) {
-    if (e.response != null && e.response?.data != null) {
-      final data = e.response?.data;
-      if (data is Map && data.containsKey('message')) {
-        return data['message'].toString();
-      }
+  // 3. API Lấy thông tin người dùng hiện tại
+  Future<ApiResponse<UserResponse>> me() async {
+    try {
+      final response = await _dio.get('/auth/me');
+      final userResponse = UserResponse.fromMap(response.data);
+      return ApiResponse.success(userResponse, statusCode: response.statusCode);
+    } catch (e) {
+      return ApiResponse.error(e);
+    }
+  }
+
+  // 4. API đổi mật khẩu
+  Future<ApiResponse<Response>> changePassword(
+    ChangePasswordRequest changePasswordRequest,
+  ) async {
+    try {
+      final response = await _dio.post(
+        '/auth/change-password',
+        data: changePasswordRequest.toJson(),
+      );
+      return ApiResponse.success(response, statusCode: response.statusCode);
+    } catch (e) {
+      return ApiResponse.error(e);
     }
   }
 }

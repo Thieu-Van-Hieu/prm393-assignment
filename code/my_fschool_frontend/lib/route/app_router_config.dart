@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_fschool_frontend/screen/profile_screen.dart';
 
 class AppRouteMeta {
   final String title;
@@ -52,8 +53,7 @@ class AppRouteMeta {
       hasBackButton: false,
       icon: Icons.account_circle_outlined,
       selectedIcon: Icons.account_circle,
-      builder: (context, state) =>
-          const Center(child: Text('Màn hình Tài khoản')),
+      builder: (context, state) => const Center(child: ProfileScreen()),
     ),
     '/dashboard/attendance-detail': AppRouteMeta(
       title: 'Chi tiết điểm danh',

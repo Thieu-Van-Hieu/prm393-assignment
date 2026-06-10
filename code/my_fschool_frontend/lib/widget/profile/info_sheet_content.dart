@@ -17,7 +17,7 @@ class InfoSheetContent extends StatelessWidget {
         _buildInfoRow('Email', profile.email),
         _buildInfoRow(
           'Vai trò',
-          profile.roleName == "PARENT" ? "Bố/Mẹ" : profile.roleName,
+          profile.roleName == "PARENT" ? "Phụ huynh" : profile.roleName,
         ),
       ],
     );
