@@ -3,7 +3,13 @@ package prm393.se1911.assignment.myfschoolbackend.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import prm393.se1911.assignment.myfschoolbackend.entity.User;
+import prm393.se1911.assignment.myfschoolbackend.exception.NotFoundException;
+import prm393.se1911.assignment.myfschoolbackend.exception.UnauthorizedException;
+import prm393.se1911.assignment.myfschoolbackend.model.request.ChangePasswordRequest;
+import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
+import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
+import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 import prm393.se1911.assignment.myfschoolbackend.repository.UserRepository;
 import prm393.se1911.assignment.myfschoolbackend.service.AuthService;
 import prm393.se1911.assignment.myfschoolbackend.service.OtpService;
@@ -19,52 +25,82 @@ public class AuthServiceImpl implements AuthService {
     private final OtpService otpService;
 
     @Override
-    public Optional<User> authenticate(LoginRequest loginRequest) {
+    public LoginResponse authenticate(LoginRequest loginRequest) {
         Optional<User> userOptional = userRepository.findByPhoneNumber(loginRequest.phoneNumber());
         if (userOptional.isPresent() && userOptional.get().getPassword().equals(loginRequest.password())) {
-            return userOptional;
+            User user = userOptional.get();
+            return LoginResponse.builder()
+                    .userId(user.getId())
+                    .fullName(user.getFullName())
+                    .role(user.getRole())
+                    .build();
         }
-        return Optional.empty();
+        throw new UnauthorizedException("Tài khoản hoặc mật khẩu không chính xác! Vui lòng thử lại.");
     }
 
     @Override
-    public boolean resetPassword(String phoneNumber) {
+    public void resetPassword(ForgotPasswordRequest forgotPasswordRequest) {
+        String phoneNumber = forgotPasswordRequest.phoneNumber();
+
+        // Kiểm tra tính hợp lệ của dữ liệu đầu vào
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Số điện thoại không được để trống! Vui lòng nhập lại.");
+        }
+
         Optional<User> userOptional = userRepository.findByPhoneNumber(phoneNumber);
 
         if (userOptional.isEmpty()) {
-            return false; // Trả về thất bại nếu số điện thoại không có trong DB
+            throw new NotFoundException("Số điện thoại không tồn tại trong hệ thống! Vui lòng kiểm tra lại.");
         }
 
         User user = userOptional.get();
 
-        // 1. Gọi sang OtpService để sinh pass 6 số và gửi SMS ngầm
         String temporaryPassword = otpService.sendNewPasswordViaSms(phoneNumber);
 
-        // 2. Lưu mật khẩu mới được sinh ra đè vào trường password hiện tại trong Database
         user.setPassword(temporaryPassword);
         userRepository.save(user);
-
-        return true;
     }
 
     @Override
-    public boolean changePassword(String userId, String oldPassword, String newPassword) {
+    public void changePassword(String userId, ChangePasswordRequest changePasswordRequest) {
+
+        String oldPassword = changePasswordRequest.oldPassword();
+        String newPassword = changePasswordRequest.newPassword();
+
+        if (oldPassword == null || newPassword == null || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Vui lòng cung cấp mật khẩu cũ và mật khẩu mới hợp lệ!");
+        }
+
         Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
 
         if (userOptional.isEmpty()) {
-            return false; // Không tìm thấy User
+            throw new IllegalArgumentException("Người dùng không tồn tại! Vui lòng đăng nhập lại.");
         }
 
         User user = userOptional.get();
 
         // Kiểm tra mật khẩu cũ nhập vào có khớp với mật khẩu trong DB không
         if (!user.getPassword().equals(oldPassword)) {
-            return false; // Mật khẩu cũ không chính xác
+            throw new IllegalArgumentException("Mật khẩu cũ không đúng hoặc người dùng không tồn tại! Vui lòng thử lại.");
         }
 
         // Hợp lệ thì cập nhật mật khẩu mới
         user.setPassword(newPassword);
         userRepository.save(user);
-        return true;
+    }
+
+    @Override
+    public UserResponse findById(UUID id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy thông tin người dùng! Vui lòng đăng nhập lại.");
+        }
+        User user = userOptional.get();
+        return UserResponse.builder()
+                .fullName(user.getFullName())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .roleName(user.getRole())
+                .build();
     }
 }

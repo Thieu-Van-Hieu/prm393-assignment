@@ -1,14 +1,19 @@
 package prm393.se1911.assignment.myfschoolbackend.service;
 
-import prm393.se1911.assignment.myfschoolbackend.entity.User;
+import prm393.se1911.assignment.myfschoolbackend.model.request.ChangePasswordRequest;
+import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
+import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
+import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 
-import java.util.Optional;
+import java.util.UUID;
 
 public interface AuthService {
-    Optional<User> authenticate(LoginRequest loginRequest);
+    LoginResponse authenticate(LoginRequest loginRequest);
 
-    boolean resetPassword(String phoneNumber);
+    UserResponse findById(UUID id);
 
-    boolean changePassword(String userId, String oldPassword, String newPassword);
+    void resetPassword(ForgotPasswordRequest forgotPasswordRequest);
+
+    void changePassword(String userId, ChangePasswordRequest changePasswordRequest);
 }

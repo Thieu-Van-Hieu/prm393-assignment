@@ -4,15 +4,16 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import prm393.se1911.assignment.myfschoolbackend.entity.User;
-import prm393.se1911.assignment.myfschoolbackend.exception.NotFoundException;
 import prm393.se1911.assignment.myfschoolbackend.exception.UnauthorizedException;
+import prm393.se1911.assignment.myfschoolbackend.model.request.ChangePasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
+import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
+import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 import prm393.se1911.assignment.myfschoolbackend.service.AuthService;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
@@ -26,45 +27,54 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
 
         // 1. Gọi xuống tầng Service xử lý nghiệp vụ
-        Optional<User> userOptional = authService.authenticate(request);
-
-        if (userOptional.isEmpty()) {
-            throw new UnauthorizedException("Tài khoản hoặc mật khẩu không chính xác! Vui lòng thử lại.");
-        }
-
-        User user = userOptional.get();
+        LoginResponse loginResponse = authService.authenticate(request);
 
         // 2. Đăng nhập đúng -> Lưu thông tin vào Session
-        session.setAttribute("USER_ID", user.getId());
-        session.setAttribute("USER_ROLE", user.getRole());
+        session.setAttribute("USER_ID", loginResponse.userId());
+        session.setAttribute("USER_ROLE", loginResponse.role());
 
         // 3. Trả về thông tin cho Flutter
-        return ResponseEntity.ok(Map.of(
-                "userId", user.getId(),
-                "fullName", user.getFullName(),
-                "role", user.getRole()
-        ));
+        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest forgotPasswordRequest) {
-        String phoneNumber = forgotPasswordRequest.phoneNumber();
-
-        // Kiểm tra tính hợp lệ của dữ liệu đầu vào
-        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
-            throw new IllegalArgumentException("Số điện thoại không được để trống! Vui lòng nhập lại.");
-        }
 
         // Gọi sang Service xử lý logic reset và gửi tin nhắn
-        boolean isResetSuccess = authService.resetPassword(phoneNumber);
-
-        if (!isResetSuccess) {
-            throw new NotFoundException("Số điện thoại không tồn tại trong hệ thống! Vui lòng kiểm tra lại.");
-        }
+        authService.resetPassword(forgotPasswordRequest);
 
         // Trả về thông báo thành công cho phía Flutter hiển thị Dialog
         return ResponseEntity.ok(Map.of(
                 "message", "Mật khẩu mới gồm 6 chữ số đã được gửi trực tiếp qua SMS điện thoại của bạn!"
         ));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, HttpSession session) {
+        // Lấy USER_ID của ông phụ huynh đang đăng nhập từ Session (được Interceptor đảm bảo bảo mật)
+        Object userIdObj = session.getAttribute("USER_ID");
+        if (userIdObj == null) {
+            throw new UnauthorizedException("Bạn phải đăng nhập để thực hiện hành động này!");
+        }
+        String userId = userIdObj.toString();
+
+        // Gọi xuống service xử lý kiểm tra và đổi pass
+        authService.changePassword(userId, changePasswordRequest);
+
+        return ResponseEntity.ok(Map.of("message", "Đổi mật khẩu thành công!"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpSession session) {
+        Object userIdObj = session.getAttribute("USER_ID");
+        if (userIdObj == null) {
+            throw new UnauthorizedException("Bạn phải đăng nhập để thực hiện hành động này!");
+        }
+        String userId = userIdObj.toString();
+
+        UserResponse userResponse = authService.findById(UUID.fromString(userId));
+
+
+        return ResponseEntity.ok(userResponse);
     }
 }
