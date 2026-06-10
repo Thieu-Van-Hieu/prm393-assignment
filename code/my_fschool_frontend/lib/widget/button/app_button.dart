@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
 
-enum AppButtonType { primary, secondary, outline, text }
+enum AppButtonType { primary, secondary, danger, info }
+
+enum AppButtonStyle { filled, tonal, outline, text }
 
 enum AppButtonSize { small, medium, big }
 
@@ -9,6 +11,7 @@ class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final AppButtonType type;
+  final AppButtonStyle style;
   final AppButtonSize size;
   final IconData? icon;
   final bool isLoading;
@@ -19,6 +22,7 @@ class AppButton extends StatelessWidget {
     required this.text,
     required this.onPressed,
     this.type = AppButtonType.primary,
+    this.style = AppButtonStyle.filled,
     this.size = AppButtonSize.medium,
     this.icon,
     this.isLoading = false,
@@ -27,7 +31,9 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Tính toán Chiêu cao & FontSize dựa trên Size
+    // ----------------------------------------------------
+    // 1. TÍNH TOÁN KÍCH THƯỚC (SIZE)
+    // ----------------------------------------------------
     double height;
     double fontSize;
     EdgeInsetsGeometry padding;
@@ -50,39 +56,75 @@ class AppButton extends StatelessWidget {
         break;
     }
 
-    // 2. Tính toán Màu sắc dựa trên Type
+    // ----------------------------------------------------
+    // 2. LẤY MÀU GỐC THEO NGỮ CẢNH (TYPE)
+    // ----------------------------------------------------
+    Color baseColor;
+    switch (type) {
+      case AppButtonType.primary:
+        baseColor = AppColors.buttonPrimary;
+        break;
+      case AppButtonType.secondary:
+        baseColor = AppColors.buttonSecondary;
+        break;
+      case AppButtonType.danger:
+        baseColor = AppColors.danger; // Lấy thẳng màu đỏ hệ thống
+        break;
+      case AppButtonType.info:
+        baseColor = AppColors.info;
+        break;
+    }
+
+    // ----------------------------------------------------
+    // 3. ĐỘNG HÓA MÀU SẮC THEO STYLE (Tonal, Filled, Outline, Text)
+    // ----------------------------------------------------
     Color backgroundColor = Colors.transparent;
     Color textColor = AppColors.textButton;
     BorderSide borderSide = BorderSide.none;
     double elevation = 0;
 
     if (onPressed == null) {
-      backgroundColor = AppColors.inputBorder;
+      // Trạng thái Bị Disable
+      backgroundColor =
+          (style == AppButtonStyle.filled || style == AppButtonStyle.tonal)
+          ? AppColors.inputBorder
+          : Colors.transparent;
       textColor = AppColors.textSecondary;
+      borderSide = style == AppButtonStyle.outline
+          ? const BorderSide(color: AppColors.inputBorder, width: 1.5)
+          : BorderSide.none;
     } else {
-      switch (type) {
-        case AppButtonType.primary:
-          backgroundColor = AppColors.buttonPrimary;
-          textColor = AppColors.textButton;
-          elevation = 2.0; // Đổ bóng nhẹ cho nút bấm chính theo mockup
+      // Trạng thái Hoạt động bình thường
+      switch (style) {
+        case AppButtonStyle.filled:
+          backgroundColor = baseColor;
+          textColor = AppColors.textButton; // Chữ trắng nổi bật
+          elevation = type == AppButtonType.primary ? 2.0 : 1.0;
           break;
-        case AppButtonType.secondary:
-          backgroundColor = AppColors.buttonSecondary;
-          textColor = AppColors.textButton;
-          elevation = 1.0;
+
+        case AppButtonStyle.tonal:
+          // 🆕 Nền lấy màu gốc hạ opacity xuống 12% (alpha: 0.12), chữ lấy full màu gốc rực rỡ
+          backgroundColor = baseColor.withValues(alpha: 0.12);
+          textColor = baseColor;
+          elevation = 0.0; // Tonal style thường để phẳng không đổ bóng
           break;
-        case AppButtonType.outline:
+
+        case AppButtonStyle.outline:
           backgroundColor = Colors.transparent;
-          textColor = AppColors.orangeFPT;
-          borderSide = const BorderSide(color: AppColors.orangeFPT, width: 1.5);
+          textColor = baseColor;
+          borderSide = BorderSide(color: baseColor, width: 1.5);
           break;
-        case AppButtonType.text:
+
+        case AppButtonStyle.text:
           backgroundColor = Colors.transparent;
-          textColor = AppColors.blueFPT;
+          textColor = baseColor;
           break;
       }
     }
 
+    // ----------------------------------------------------
+    // 4. NỘI DUNG NÚT (CONTENT)
+    // ----------------------------------------------------
     Widget buttonContent = isLoading
         ? SizedBox(
             height: 20,
@@ -113,7 +155,7 @@ class AppButton extends StatelessWidget {
           );
 
     return SizedBox(
-      width: width ?? (type == AppButtonType.text ? null : double.infinity),
+      width: width ?? (style == AppButtonStyle.text ? null : double.infinity),
       height: height,
       child: ElevatedButton(
         onPressed: isLoading ? () {} : onPressed,
@@ -123,8 +165,7 @@ class AppButton extends StatelessWidget {
           elevation: elevation,
           padding: padding,
           side: borderSide,
-          shadowColor: AppColors.orangeFPT.withValues(alpha: 0.4),
-          // Màu bóng đổ cam mờ đẹp mắt
+          shadowColor: baseColor.withValues(alpha: 0.4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),

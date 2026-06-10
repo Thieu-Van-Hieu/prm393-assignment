@@ -23,15 +23,17 @@ class AppColors {
   static const Color buttonSecondary = Color(0xFF718096);
   static const Color divider = Color(0xFFEDF2F7);
 
-  // 4. MÀU TRẠNG THÁI ĐIỂM DANH & HỌC TẬP (STATUS COLORS)
+  // 4. MÀU TRẠNG THÁI & NGỮ CẢNH (STATUS & SEMANTIC COLORS)
   static const Color statusAttendedBg = Color(0xFFE6F4EA);
   static const Color statusAttendedText = Color(0xFF72BB53);
-
   static const Color statusAbsentBg = Color(0xFFFCE8E6);
   static const Color statusAbsentText = Color(0xFFC5221F);
-
   static const Color statusPendingBg = Color(0xFFFEF3E6);
   static const Color statusPendingText = Color(0xFFB06000);
+
+  // 🆕 Thêm màu Danger và Info hệ thống
+  static const Color danger = Color(0xFFE53E3E);
+  static const Color info = Color(0xFF3182CE);
 
   // 5. MÀU ĐÁNH GIÁ & BẢNG ĐIỂM (GRADE COLORS)
   static const Color gradeGood = Color(0xFF48BB78);

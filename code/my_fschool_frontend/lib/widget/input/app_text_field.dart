@@ -5,6 +5,7 @@ import 'package:my_fschool_frontend/constant/app_colors.dart';
 class AppTextField extends HookWidget {
   final String label;
   final String? hintText;
+  final Icon? prefixIcon;
   final TextEditingController controller;
   final bool isPassword;
   final TextInputType keyboardType;
@@ -14,6 +15,7 @@ class AppTextField extends HookWidget {
     super.key,
     required this.label,
     this.hintText,
+    this.prefixIcon,
     required this.controller,
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
@@ -55,6 +57,7 @@ class AppTextField extends HookWidget {
               color: AppColors.textSecondary,
               fontSize: 18,
             ),
+            prefixIcon: prefixIcon,
             contentPadding: const EdgeInsets.symmetric(vertical: 10),
             // Đường gạch dưới chân (Underline) theo mockup
             enabledBorder: const UnderlineInputBorder(

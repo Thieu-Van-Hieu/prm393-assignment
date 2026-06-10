@@ -30,7 +30,7 @@ class MainLayout extends HookWidget {
     }, [location]);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.scaffoldBackground,
 
       // A. HEADER TỰ ĐỘNG ĂN THEO CẤU HÌNH META
       appBar: AppBar(
