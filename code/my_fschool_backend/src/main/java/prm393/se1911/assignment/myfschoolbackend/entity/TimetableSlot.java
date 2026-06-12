@@ -49,7 +49,7 @@ public class TimetableSlot {
     private Time endTime;
 
     @OneToMany(mappedBy = "slot")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.Attendance> attendances = new LinkedHashSet<>();
+    private Set<Attendance> attendances = new LinkedHashSet<>();
 
 
 }

@@ -12,7 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "parent_student")
 public class ParentStudent {
     @EmbeddedId
-    private prm393.se1911.assignment.myfschoolbackend.entity.ParentStudentId id;
+    private ParentStudentId id;
 
     @MapsId("parentId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -24,7 +24,7 @@ public class ParentStudent {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id", nullable = false)
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
 
 }

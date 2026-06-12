@@ -23,12 +23,12 @@ public class ClubMember {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "club_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.Club club;
+    private Club club;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
     @ColumnDefault("'MEMBER'")
     @Column(name = "role", length = 20)

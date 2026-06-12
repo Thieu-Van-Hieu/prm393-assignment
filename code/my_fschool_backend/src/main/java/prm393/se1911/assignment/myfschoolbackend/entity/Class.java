@@ -33,10 +33,10 @@ public class Class {
     private User homeroomTeacher;
 
     @OneToMany(mappedBy = "classField")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.StudentClass> studentClasses = new LinkedHashSet<>();
+    private Set<StudentClass> studentClasses = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "classField")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.TimetableSlot> timetableSlots = new LinkedHashSet<>();
+    private Set<TimetableSlot> timetableSlots = new LinkedHashSet<>();
 
 
 }

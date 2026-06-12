@@ -47,19 +47,20 @@ public class User {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "parent")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.Application> applications = new LinkedHashSet<>();
+    private Set<Application> applications = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "homeroomTeacher")
     private Set<Class> classes = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "parent")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.EventRegistration> eventRegistrations = new LinkedHashSet<>();
+    private Set<EventRegistration> eventRegistrations = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "parents")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.Student> students = new LinkedHashSet<>();
+    private Set<Student> students = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.UserDeviceToken> userDeviceTokens = new LinkedHashSet<>();
+    private Set<UserDeviceToken> userDeviceTokens = new LinkedHashSet<>();
 
-
+    @OneToOne(mappedBy = "user")
+    private Student student;
 }

@@ -24,12 +24,12 @@ public class Attendance {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "slot_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.TimetableSlot slot;
+    private TimetableSlot slot;
 
     @Column(name = "attendance_date", nullable = false)
     private LocalDate attendanceDate;

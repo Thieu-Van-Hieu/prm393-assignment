@@ -23,7 +23,7 @@ public class AcademicGrade {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
     @Column(name = "subject_name", nullable = false, length = 50)
     private String subjectName;

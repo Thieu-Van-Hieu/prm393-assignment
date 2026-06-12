@@ -37,7 +37,7 @@ public class Club {
     private Timestamp createdAt;
 
     @OneToMany(mappedBy = "club")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.ClubMember> clubMembers = new LinkedHashSet<>();
+    private Set<ClubMember> clubMembers = new LinkedHashSet<>();
 
 
 }

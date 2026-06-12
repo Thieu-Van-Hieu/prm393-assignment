@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -36,16 +38,16 @@ public class Student {
     private String avatarUrl;
 
     @OneToMany(mappedBy = "student")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.AcademicGrade> academicGrades = new LinkedHashSet<>();
+    private Set<AcademicGrade> academicGrades = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.Application> applications = new LinkedHashSet<>();
+    private Set<Application> applications = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.Attendance> attendances = new LinkedHashSet<>();
+    private Set<Attendance> attendances = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.ClubMember> clubMembers = new LinkedHashSet<>();
+    private Set<ClubMember> clubMembers = new LinkedHashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -56,7 +58,10 @@ public class Student {
     private Set<User> parents = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "student")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.StudentClass> studentClasses = new LinkedHashSet<>();
+    private Set<StudentClass> studentClasses = new LinkedHashSet<>();
 
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -24,7 +24,7 @@ public class Application {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id")
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)

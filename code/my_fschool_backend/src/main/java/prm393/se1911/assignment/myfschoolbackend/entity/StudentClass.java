@@ -13,13 +13,13 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "student_class")
 public class StudentClass {
     @EmbeddedId
-    private prm393.se1911.assignment.myfschoolbackend.entity.StudentClassId id;
+    private StudentClassId id;
 
     @MapsId("studentId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_id", nullable = false)
-    private prm393.se1911.assignment.myfschoolbackend.entity.Student student;
+    private Student student;
 
     @MapsId("classId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -37,10 +37,10 @@ public class Event {
     private Timestamp createdAt;
 
     @OneToMany(mappedBy = "event")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.EventProperty> eventProperties = new LinkedHashSet<>();
+    private Set<EventProperty> eventProperties = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "event")
-    private Set<prm393.se1911.assignment.myfschoolbackend.entity.EventRegistration> eventRegistrations = new LinkedHashSet<>();
+    private Set<EventRegistration> eventRegistrations = new LinkedHashSet<>();
 
 
 }
