@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_fschool_frontend/screen/dashboard_screen.dart';
 import 'package:my_fschool_frontend/screen/profile_screen.dart';
 
 class AppRouteMeta {
@@ -28,8 +29,7 @@ class AppRouteMeta {
       hasBackButton: false,
       icon: Icons.home_outlined,
       selectedIcon: Icons.home_filled,
-      builder: (context, state) =>
-          const Center(child: Text('Màn hình Dashboard Phụ Huynh')),
+      builder: (context, state) => DashboardScreen(),
     ),
     '/schedule': AppRouteMeta(
       title: 'Thời khóa biểu',
