@@ -12,7 +12,7 @@ class AppNavbar extends StatelessWidget {
   static List<MapEntry<String, AppRouteMeta>> navItems() {
     final navEntries = AppRouteMeta.appRouterConfig.entries
         .where(
-          (entry) => entry.value.tabIndex != -1,
+          (entry) => entry.value.tabIndex != -1 && entry.value.isNavBarItem,
         ) // Chỉ lấy các trang thuộc menu
         .toList();
 

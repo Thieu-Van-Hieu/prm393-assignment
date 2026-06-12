@@ -6,6 +6,7 @@ class AppRouteMeta {
   final String title;
   final int tabIndex;
   final bool hasBackButton;
+  final bool isNavBarItem;
   final IconData? icon;
   final IconData? selectedIcon;
   final Widget Function(BuildContext, GoRouterState) builder;
@@ -14,6 +15,7 @@ class AppRouteMeta {
     required this.title,
     required this.tabIndex,
     required this.hasBackButton,
+    this.isNavBarItem = true,
     this.icon,
     this.selectedIcon,
     required this.builder,
@@ -55,12 +57,29 @@ class AppRouteMeta {
       selectedIcon: Icons.account_circle,
       builder: (context, state) => const Center(child: ProfileScreen()),
     ),
-    '/dashboard/attendance-detail': AppRouteMeta(
-      title: 'Chi tiết điểm danh',
-      tabIndex: -1, // Trang con không hiển thị trên Navbar
+    '/application': AppRouteMeta(
+      title: 'Chi tiết đơn từ',
+      tabIndex: 0,
       hasBackButton: true,
+      isNavBarItem: false,
       builder: (context, state) =>
-          const Center(child: Text('Nội dung chi tiết điểm danh')),
+          const Center(child: Text('Nội dung chi tiết đơn từ')),
+    ),
+    '/event': AppRouteMeta(
+      title: 'Chi tiết sự kiện',
+      tabIndex: 0,
+      hasBackButton: true,
+      isNavBarItem: false,
+      builder: (context, state) =>
+          const Center(child: Text('Nội dung chi tiết sự kiện')),
+    ),
+    '/club': AppRouteMeta(
+      title: 'Chi tiết câu lạc bộ',
+      tabIndex: 0,
+      hasBackButton: true,
+      isNavBarItem: false,
+      builder: (context, state) =>
+          const Center(child: Text('Nội dung chi tiết câu lạc bộ')),
     ),
   };
 
