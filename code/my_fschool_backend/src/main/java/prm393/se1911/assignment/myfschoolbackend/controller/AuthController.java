@@ -11,6 +11,7 @@ import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
 import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 import prm393.se1911.assignment.myfschoolbackend.service.AuthService;
+import prm393.se1911.assignment.myfschoolbackend.service.UserService;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
@@ -72,8 +74,7 @@ public class AuthController {
         }
         String userId = userIdObj.toString();
 
-        UserResponse userResponse = authService.findById(UUID.fromString(userId));
-
+        UserResponse userResponse = userService.getUserContext(UUID.fromString(userId));
 
         return ResponseEntity.ok(userResponse);
     }

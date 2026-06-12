@@ -9,7 +9,6 @@ import prm393.se1911.assignment.myfschoolbackend.model.request.ChangePasswordReq
 import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
-import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 import prm393.se1911.assignment.myfschoolbackend.repository.UserRepository;
 import prm393.se1911.assignment.myfschoolbackend.service.AuthService;
 import prm393.se1911.assignment.myfschoolbackend.service.OtpService;
@@ -87,20 +86,5 @@ public class AuthServiceImpl implements AuthService {
         // Hợp lệ thì cập nhật mật khẩu mới
         user.setPassword(newPassword);
         userRepository.save(user);
-    }
-
-    @Override
-    public UserResponse findById(UUID id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            throw new NotFoundException("Không tìm thấy thông tin người dùng! Vui lòng đăng nhập lại.");
-        }
-        User user = userOptional.get();
-        return UserResponse.builder()
-                .fullName(user.getFullName())
-                .phoneNumber(user.getPhoneNumber())
-                .email(user.getEmail())
-                .roleName(user.getRole())
-                .build();
     }
 }
