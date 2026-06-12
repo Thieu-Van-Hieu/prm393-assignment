@@ -3,6 +3,7 @@
 !*/
 
 # 2. Giữ lại các cấu hình Git và cấu trúc gốc
+!.gitattributes
 !.gitignore
 !README.md
 
@@ -43,7 +44,6 @@ code/my_fschool_frontend/android/**/GeneratedPluginRegistrant.java
 !code/my_fschool_database/
 code/my_fschool_database/*
 !code/my_fschool_database/init.sql
-!code/my_fschool_database/data.sql
 
 # 5. WHITELIST CHO SPRING BACKEND (my_fschool_backend)
 !code/my_fschool_backend/
@@ -53,3 +53,11 @@ code/my_fschool_backend/*
 !code/my_fschool_backend/pom.xml
 !code/my_fschool_backend/mvnw
 !code/my_fschool_backend/mvnw.cmd
+
+# 6. WHITELIST CHO ASSETS (assets)
+!assets/
+!assets/**
+
+# 7. WHITELIST CHO BIẾN MÔI TRƯỜNG
+!**/.env
+**.key

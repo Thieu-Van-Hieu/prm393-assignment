@@ -6,7 +6,7 @@ import 'package:my_fschool_frontend/util/session_manager.dart';
 class AppDio {
   static Dio? _dio;
 
-  static const String ipv4Address = '192.168.1.9';
+  static const String ipv4Address = '192.168.1.8';
   static const String baseUrl = 'http://$ipv4Address:8080/api/v1';
 
   static Dio get client {
