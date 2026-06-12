@@ -46,10 +46,9 @@ class MainLayout extends HookWidget {
                   color: AppColors.textPrimary,
                   size: 20,
                 ),
-                onPressed: () => context.safePop,
+                onPressed: context.safePop,
               )
             : null,
-        // Ăn theo biến title trong class Meta
         title: Text(
           meta.title,
           style: const TextStyle(
@@ -72,7 +71,6 @@ class MainLayout extends HookWidget {
       body: child,
 
       // C. NAVBAR ĐÁY TỰ ĐỘNG ẨN/HIỆN
-      // Nếu tabIndex == -1 (Trang con) -> Tự ẩn Navbar đáy bằng cách truyền null
       bottomNavigationBar: meta.tabIndex == -1
           ? null
           : AppNavbar(

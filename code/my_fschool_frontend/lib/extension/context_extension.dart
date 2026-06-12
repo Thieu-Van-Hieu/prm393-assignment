@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 extension ContextExtension on BuildContext {
   void safePop() {
-    if (Navigator.canPop(this)) {
-      Navigator.pop(this);
+    if (GoRouter.of(this).canPop()) {
+      GoRouter.of(this).pop();
     }
   }
 }
