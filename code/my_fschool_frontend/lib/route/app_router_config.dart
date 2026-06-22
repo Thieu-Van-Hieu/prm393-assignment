@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_fschool_frontend/screen/dashboard_screen.dart';
 import 'package:my_fschool_frontend/screen/profile_screen.dart';
+import 'package:my_fschool_frontend/screen/schedule_screen.dart';
 
 class AppRouteMeta {
   final String title;
@@ -37,8 +38,7 @@ class AppRouteMeta {
       hasBackButton: false,
       icon: Icons.calendar_month_outlined,
       selectedIcon: Icons.calendar_month,
-      builder: (context, state) =>
-          const Center(child: Text('Màn hình Thời khóa biểu')),
+      builder: (context, state) => ScheduleScreen(),
     ),
     '/grades': AppRouteMeta(
       title: 'Bảng điểm',
