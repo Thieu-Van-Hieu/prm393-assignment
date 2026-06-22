@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
-import 'package:my_fschool_frontend/model/response/student_profile_response.dart';
 import 'package:my_fschool_frontend/notifier/user_profile_notifier.dart';
 import 'package:my_fschool_frontend/provider/workspace_index_provider.dart';
 import 'package:my_fschool_frontend/util/format.dart';
@@ -18,7 +17,6 @@ class DashboardScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedChildIndex = ref.watch(selectedWorkspaceIndexProvider);
     final userProfileAsync = ref.watch(userProfileProvider);
 
     useEffect(() {
@@ -70,26 +68,10 @@ class DashboardScreen extends HookConsumerWidget {
           );
         }
 
-        // 🎯 THAY ĐỔI: Lấy danh sách không gian làm việc mới
-        final workspaces = userResponse.userWorkspaceResponses;
-
-        // Kiểm tra an toàn chỉ mục (index) để tránh lỗi vỡ màn hình do out of bounds
-        int safeIndex = selectedChildIndex;
-        if (safeIndex >= workspaces.length) {
-          safeIndex = 0;
-        }
-
-        StudentProfileResponse? activeProfile;
-        String currentRole = 'STUDENT';
-        String currentClassName = 'Chưa xếp lớp';
-
-        // 🎯 THAY ĐỔI: Bốc trực tiếp context dựa theo cấu trúc phẳng hóa mới
-        if (workspaces.isNotEmpty) {
-          final activeWorkspace = workspaces[safeIndex];
-          activeProfile = activeWorkspace.profile;
-          currentRole = activeWorkspace.roleName;
-          currentClassName = activeWorkspace.className;
-        }
+        // 🎯 ĐỌC TRỰC TIẾP WORKSPACE ĐANG CHẠY TỪ PROVIDER THÔNG MINH
+        final activeWorkspace = ref.watch(activeWorkspaceProvider);
+        final activeProfile = activeWorkspace?.profile;
+        final currentClassName = activeWorkspace?.className ?? 'Chưa xếp lớp';
 
         if (activeProfile == null) {
           return const Scaffold(
@@ -109,8 +91,9 @@ class DashboardScreen extends HookConsumerWidget {
           );
         }
 
-        // 🎯 THAY ĐỔI: Chỉ ẩn nút đổi nếu danh sách lớp có từ 1 phần tử trở xuống
-        final showSwitchButton = workspaces.length > 1;
+        // Chỉ ẩn nút đổi nếu danh sách lớp có từ 1 phần tử trở xuống
+        final showSwitchButton = userResponse.userWorkspaceResponses.length > 1;
+        final currentSelectedIndex = ref.watch(selectedWorkspaceIndexProvider);
 
         // Chuẩn hóa dữ liệu điểm danh hôm nay
         String attendanceStatusText = 'Chưa có dữ liệu điểm danh';
@@ -120,7 +103,6 @@ class DashboardScreen extends HookConsumerWidget {
 
         if (activeProfile.todayAttendance != null) {
           final status = activeProfile.todayAttendance!.status;
-
           if (status == 'ATTENDED') {
             attendanceStatusText = 'Đã điểm danh đến lớp';
             attendanceTimeText = formatTime(recordedAtRaw);
@@ -145,7 +127,6 @@ class DashboardScreen extends HookConsumerWidget {
               vertical: 20.0,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 1. Thẻ thông tin học sinh
@@ -154,13 +135,13 @@ class DashboardScreen extends HookConsumerWidget {
                   className: currentClassName,
                   avatarUrl: activeProfile.avatarUrl,
                   showSwitchButton: showSwitchButton,
-                  onSwitchPressed: () => {
+                  onSwitchPressed: () {
                     AppBottomSheet.show(
                       context: context,
                       title: "Chọn không gian lớp học",
                       content: ChildListSheetContent(
                         userResponse: userResponse,
-                        initialSelectedIndex: safeIndex,
+                        initialSelectedIndex: currentSelectedIndex,
                         onChildSelected: (index) {
                           ref
                                   .read(selectedWorkspaceIndexProvider.notifier)
@@ -168,7 +149,7 @@ class DashboardScreen extends HookConsumerWidget {
                               index;
                         },
                       ),
-                    ),
+                    );
                   },
                 ),
                 const SizedBox(height: 20),
@@ -196,7 +177,7 @@ class DashboardScreen extends HookConsumerWidget {
                 // 4. Lưới chức năng
                 const UtilityGrid(),
                 const SizedBox(height: 16),
-                ClubActivityCard(),
+                const ClubActivityCard(),
               ],
             ),
           ),

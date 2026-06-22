@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart'; // 🆕 Đổi sang gói hooks_riverpod
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:my_fschool_frontend/api/auth_api.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
 import 'package:my_fschool_frontend/model/request/change_password_request.dart';
@@ -23,18 +23,17 @@ class ProfileScreen extends HookConsumerWidget {
     final isChangingPassword = useState(false);
 
     final userProfileAsync = ref.watch(userProfileProvider);
+
     final selectedChildIndex = ref.watch(selectedWorkspaceIndexProvider);
 
     // Tự động ra lệnh làm tươi dữ liệu ngầm khi đặt chân vào màn hình Profile
     useEffect(() {
       Future.microtask(() {
         if (userProfileAsync.hasValue && userProfileAsync.value != null) {
-          // Nếu đã có sẵn data cũ trong RAM, âm thầm gọi API cập nhật ngầm dưới nền
           ref
               .read(userProfileProvider.notifier)
               .fetchUserProfile(isSilent: true);
         } else {
-          // Trường hợp hiếm hoi vào thẳng trang này đầu tiên: Bật loading lôi data về
           ref
               .read(userProfileProvider.notifier)
               .fetchUserProfile(isSilent: false);
@@ -46,14 +45,15 @@ class ProfileScreen extends HookConsumerWidget {
     // Hàm xử lý Đăng xuất
     void handleLogout() async {
       await SessionManager.clear();
+
+      ref.read(selectedWorkspaceIndexProvider.notifier).state = 0;
+
       if (context.mounted) {
         context.go('/login');
       }
     }
 
-    // ĐIỀU PHỐI LAYOUT THEO TRẠNG THÁI ASYNC VALUE
     return userProfileAsync.when(
-      // 🔥 Thần chú cấm xoay vòng loading khi chuyển trang qua lại
       skipLoadingOnReload: true,
 
       loading: () => const Scaffold(
@@ -81,7 +81,6 @@ class ProfileScreen extends HookConsumerWidget {
       ),
 
       data: (profile) {
-        // Dự phòng nếu trạng thái ban đầu khởi tạo trả về null
         if (profile == null) {
           return const Scaffold(
             body: Align(
@@ -134,8 +133,9 @@ class ProfileScreen extends HookConsumerWidget {
                                 title: 'Thông tin cá nhân',
                                 content: InfoSheetContent(
                                   profile: profile,
+                                  // 🎯 ĐẬP DỮ LIỆU ĐÃ ĐƯỢC CHUẨN HÓA AN TOÀN VÀO ĐÂY
                                   workspaceIndex: selectedChildIndex,
-                                ), // Đập data sạch từ Riverpod vào đây
+                                ),
                               );
                             },
                             contentPadding: const EdgeInsets.symmetric(
@@ -158,7 +158,6 @@ class ProfileScreen extends HookConsumerWidget {
                             ),
                           ),
 
-                          // Đường gạch ngang phân cách duy nhất
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Divider(height: 1, color: AppColors.divider),
