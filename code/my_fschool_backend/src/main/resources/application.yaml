@@ -1,7 +1,6 @@
 spring:
   application:
-    name:
-      my_fschool_backend
+    name: my_fschool_backend
   datasource:
     url: jdbc:postgresql://localhost:5432/my_fschool
     username: postgres

@@ -35,9 +35,6 @@ public class User {
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @Column(name = "role", nullable = false, length = 20)
-    private String role;
-
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Timestamp createdAt;

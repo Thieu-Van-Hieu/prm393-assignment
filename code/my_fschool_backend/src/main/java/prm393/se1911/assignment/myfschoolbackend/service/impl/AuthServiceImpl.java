@@ -31,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
             return LoginResponse.builder()
                     .userId(user.getId())
                     .fullName(user.getFullName())
-                    .role(user.getRole())
                     .build();
         }
         throw new UnauthorizedException("Tài khoản hoặc mật khẩu không chính xác! Vui lòng thử lại.");

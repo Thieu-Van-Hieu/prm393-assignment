@@ -11,8 +11,6 @@ public record UserResponse(
         String phoneNumber,
         String email,
         String address,
-        String roleName, // 'PARENT', 'STUDENT'
-        StudentProfileResponse studentProfile,
-        List<StudentProfileResponse> parentStudents
+        List<UserWorkspaceResponse> userWorkspaceResponses
 ) {
 }
