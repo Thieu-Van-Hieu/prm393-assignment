@@ -4,11 +4,17 @@ import 'package:my_fschool_frontend/model/response/user_response.dart';
 
 class InfoSheetContent extends StatelessWidget {
   final UserResponse profile;
+  final int workspaceIndex;
 
-  const InfoSheetContent({super.key, required this.profile});
+  const InfoSheetContent({
+    super.key,
+    required this.profile,
+    required this.workspaceIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final workspace = profile.userWorkspaceResponses[workspaceIndex];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -17,7 +23,7 @@ class InfoSheetContent extends StatelessWidget {
         _buildInfoRow('Email', profile.email),
         _buildInfoRow(
           'Vai trò',
-          profile.roleName == "PARENT" ? "Phụ huynh" : profile.roleName,
+          workspace.roleName == "PARENT" ? "Phụ huynh" : workspace.roleName,
         ),
       ],
     );

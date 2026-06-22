@@ -15,7 +15,7 @@ class UserResponseMapper extends ClassMapperBase<UserResponse> {
   static UserResponseMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = UserResponseMapper._());
-      StudentProfileResponseMapper.ensureInitialized();
+      UserWorkspaceResponseMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -43,19 +43,13 @@ class UserResponseMapper extends ClassMapperBase<UserResponse> {
     _$address,
     opt: true,
   );
-  static String _$roleName(UserResponse v) => v.roleName;
-  static const Field<UserResponse, String> _f$roleName = Field(
-    'roleName',
-    _$roleName,
+  static List<UserWorkspaceResponse> _$userWorkspaceResponses(UserResponse v) =>
+      v.userWorkspaceResponses;
+  static const Field<UserResponse, List<UserWorkspaceResponse>>
+  _f$userWorkspaceResponses = Field(
+    'userWorkspaceResponses',
+    _$userWorkspaceResponses,
   );
-  static StudentProfileResponse? _$studentProfile(UserResponse v) =>
-      v.studentProfile;
-  static const Field<UserResponse, StudentProfileResponse> _f$studentProfile =
-      Field('studentProfile', _$studentProfile, opt: true);
-  static List<StudentProfileResponse>? _$parentStudents(UserResponse v) =>
-      v.parentStudents;
-  static const Field<UserResponse, List<StudentProfileResponse>>
-  _f$parentStudents = Field('parentStudents', _$parentStudents, opt: true);
 
   @override
   final MappableFields<UserResponse> fields = const {
@@ -64,9 +58,7 @@ class UserResponseMapper extends ClassMapperBase<UserResponse> {
     #phoneNumber: _f$phoneNumber,
     #email: _f$email,
     #address: _f$address,
-    #roleName: _f$roleName,
-    #studentProfile: _f$studentProfile,
-    #parentStudents: _f$parentStudents,
+    #userWorkspaceResponses: _f$userWorkspaceResponses,
   };
 
   static UserResponse _instantiate(DecodingData data) {
@@ -76,9 +68,7 @@ class UserResponseMapper extends ClassMapperBase<UserResponse> {
       phoneNumber: data.dec(_f$phoneNumber),
       email: data.dec(_f$email),
       address: data.dec(_f$address),
-      roleName: data.dec(_f$roleName),
-      studentProfile: data.dec(_f$studentProfile),
-      parentStudents: data.dec(_f$parentStudents),
+      userWorkspaceResponses: data.dec(_f$userWorkspaceResponses),
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:my_fschool_frontend/api/auth_api.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
 import 'package:my_fschool_frontend/model/request/change_password_request.dart';
 import 'package:my_fschool_frontend/notifier/user_profile_notifier.dart';
+import 'package:my_fschool_frontend/provider/workspace_index_provider.dart';
 import 'package:my_fschool_frontend/util/session_manager.dart';
 import 'package:my_fschool_frontend/widget/button/app_button.dart';
 import 'package:my_fschool_frontend/widget/input/app_bottom_sheet.dart';
@@ -22,6 +23,7 @@ class ProfileScreen extends HookConsumerWidget {
     final isChangingPassword = useState(false);
 
     final userProfileAsync = ref.watch(userProfileProvider);
+    final selectedChildIndex = ref.watch(selectedWorkspaceIndexProvider);
 
     // Tự động ra lệnh làm tươi dữ liệu ngầm khi đặt chân vào màn hình Profile
     useEffect(() {
@@ -132,6 +134,7 @@ class ProfileScreen extends HookConsumerWidget {
                                 title: 'Thông tin cá nhân',
                                 content: InfoSheetContent(
                                   profile: profile,
+                                  workspaceIndex: selectedChildIndex,
                                 ), // Đập data sạch từ Riverpod vào đây
                               );
                             },

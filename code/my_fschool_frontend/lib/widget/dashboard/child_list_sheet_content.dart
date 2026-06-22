@@ -17,16 +17,19 @@ class ChildListSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selectedChildIndex = ValueNotifier<int>(initialSelectedIndex);
-    final students = userResponse.parentStudents ?? [];
+    // 🎯 THAY ĐỔI: Lấy danh sách workspace responses thay vì parentStudents cũ
+    final workspaces = userResponse.userWorkspaceResponses;
 
     return SafeArea(
       child: ValueListenableBuilder<int>(
         valueListenable: selectedChildIndex,
         builder: (context, currentIndex, childWidget) {
-          if (students.isEmpty) {
+          if (workspaces.isEmpty) {
             return const Padding(
               padding: EdgeInsets.all(24.0),
-              child: Center(child: Text('Không tìm thấy thông tin học sinh')),
+              child: Center(
+                child: Text('Không tìm thấy thông tin không gian lớp học'),
+              ),
             );
           }
 
@@ -38,13 +41,16 @@ class ChildListSheetContent extends StatelessWidget {
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              itemCount: students.length,
+              itemCount: workspaces.length,
               itemBuilder: (context, index) {
-                final child = students[index];
+                final workspace = workspaces[index];
+                final childProfile =
+                    workspace.profile; // Hồ sơ học sinh đi kèm lớp này
                 final isSelected = index == currentIndex;
+
                 final hasValidUrl =
-                    child.avatarUrl != null &&
-                    child.avatarUrl!.trim().isNotEmpty;
+                    childProfile.avatarUrl != null &&
+                    childProfile.avatarUrl!.trim().isNotEmpty;
 
                 return Container(
                   margin: const EdgeInsets.symmetric(
@@ -86,7 +92,7 @@ class ChildListSheetContent extends StatelessWidget {
                       child: ClipOval(
                         child: hasValidUrl
                             ? Image.network(
-                                child.avatarUrl!,
+                                childProfile.avatarUrl!,
                                 fit: BoxFit.cover,
                                 headers: const {
                                   'User-Agent':
@@ -128,8 +134,9 @@ class ChildListSheetContent extends StatelessWidget {
                               ),
                       ),
                     ),
+                    // 🎯 HIỂN THỊ: Ưu tiên lấy tên học sinh/con, nếu không có hiển thị vai trò người dùng
                     title: Text(
-                      child.fullName,
+                      childProfile.fullName,
                       style: TextStyle(
                         fontFamily: 'Asap',
                         fontSize: 16,
@@ -142,7 +149,7 @@ class ChildListSheetContent extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      child.currentClass?.className ?? 'Chưa xếp lớp',
+                      '${workspace.className} (${workspace.schoolYear})',
                       style: const TextStyle(
                         fontFamily: 'Asap',
                         fontSize: 13,

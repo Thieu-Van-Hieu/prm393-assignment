@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:my_fschool_frontend/model/response/student_profile_response.dart';
+import 'package:my_fschool_frontend/model/response/user_workspace_response.dart';
 
 part 'user_response.mapper.dart';
 
@@ -13,10 +13,7 @@ class UserResponse with UserResponseMappable {
   String phoneNumber;
   String email;
   String? address;
-  String roleName; // 'PARENT' hoặc 'STUDENT'
-  StudentProfileResponse? studentProfile; // Trả về nếu roleName là STUDENT
-  List<StudentProfileResponse>?
-  parentStudents; // Danh sách các con nếu là PARENT
+  List<UserWorkspaceResponse> userWorkspaceResponses;
 
   UserResponse({
     required this.id,
@@ -24,9 +21,7 @@ class UserResponse with UserResponseMappable {
     required this.phoneNumber,
     required this.email,
     this.address,
-    required this.roleName,
-    this.studentProfile,
-    this.parentStudents,
+    required this.userWorkspaceResponses,
   });
 
   factory UserResponse.fromJson(String json) =>

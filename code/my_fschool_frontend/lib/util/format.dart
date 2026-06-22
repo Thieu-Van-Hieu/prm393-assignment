@@ -7,7 +7,6 @@ String formatTime(String? raw) {
 
     if (raw.endsWith('Z')) {
       String cleanRaw = raw.substring(0, raw.length - 1).replaceAll(' ', 'T');
-      DateTime nativeTime = DateTime.parse(cleanRaw);
 
       parsedTime = DateTime.parse("$cleanRaw+00:00").toLocal();
     } else {

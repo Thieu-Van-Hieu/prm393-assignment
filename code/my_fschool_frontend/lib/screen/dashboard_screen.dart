@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
 import 'package:my_fschool_frontend/model/response/student_profile_response.dart';
 import 'package:my_fschool_frontend/notifier/user_profile_notifier.dart';
-import 'package:my_fschool_frontend/provider/selected_child_provider.dart';
+import 'package:my_fschool_frontend/provider/workspace_index_provider.dart';
 import 'package:my_fschool_frontend/util/format.dart';
 import 'package:my_fschool_frontend/widget/dashboard/attendance_status_card.dart';
 import 'package:my_fschool_frontend/widget/dashboard/child_list_sheet_content.dart';
@@ -18,11 +18,9 @@ class DashboardScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedChildIndex = ref.watch(selectedChildIndexProvider);
-
+    final selectedChildIndex = ref.watch(selectedWorkspaceIndexProvider);
     final userProfileAsync = ref.watch(userProfileProvider);
 
-    // 🆕 ĐIỀU PHỐI GỌI API THÔNG MINH DỰA TRÊN HÀM TÁCH RIÊNG
     useEffect(() {
       Future.microtask(() {
         final hasData =
@@ -43,7 +41,6 @@ class DashboardScreen extends HookConsumerWidget {
 
     return userProfileAsync.when(
       skipLoadingOnReload: true,
-
       loading: () => const Scaffold(
         body: Center(
           child: Padding(
@@ -52,7 +49,6 @@ class DashboardScreen extends HookConsumerWidget {
           ),
         ),
       ),
-
       error: (err, stack) => Scaffold(
         body: Center(
           child: Padding(
@@ -65,9 +61,7 @@ class DashboardScreen extends HookConsumerWidget {
           ),
         ),
       ),
-
       data: (userResponse) {
-        // Trường hợp trạng thái build() đầu tiên trả về null, hiển thị màn chờ tạm thời trong tích tắc
         if (userResponse == null) {
           return const Scaffold(
             body: Center(
@@ -76,29 +70,34 @@ class DashboardScreen extends HookConsumerWidget {
           );
         }
 
-        final isStudent = userResponse.roleName == 'STUDENT';
+        // 🎯 THAY ĐỔI: Lấy danh sách không gian làm việc mới
+        final workspaces = userResponse.userWorkspaceResponses;
 
-        // 1. Xác định Hồ sơ học sinh (StudentProfileResponse) sẽ hiển thị lên màn hình
-        StudentProfileResponse? activeProfile;
-
-        if (isStudent) {
-          activeProfile = userResponse.studentProfile;
-        } else {
-          // Nếu là phụ huynh, lấy đứa con dựa theo index đang được chọn
-          if (userResponse.parentStudents != null &&
-              userResponse.parentStudents!.isNotEmpty) {
-            activeProfile = userResponse.parentStudents![selectedChildIndex];
-          }
+        // Kiểm tra an toàn chỉ mục (index) để tránh lỗi vỡ màn hình do out of bounds
+        int safeIndex = selectedChildIndex;
+        if (safeIndex >= workspaces.length) {
+          safeIndex = 0;
         }
 
-        // Nếu dữ liệu trống rỗng hoàn toàn (đề phòng lỗi hệ thống)
+        StudentProfileResponse? activeProfile;
+        String currentRole = 'STUDENT';
+        String currentClassName = 'Chưa xếp lớp';
+
+        // 🎯 THAY ĐỔI: Bốc trực tiếp context dựa theo cấu trúc phẳng hóa mới
+        if (workspaces.isNotEmpty) {
+          final activeWorkspace = workspaces[safeIndex];
+          activeProfile = activeWorkspace.profile;
+          currentRole = activeWorkspace.roleName;
+          currentClassName = activeWorkspace.className;
+        }
+
         if (activeProfile == null) {
           return const Scaffold(
             body: Center(
               child: Padding(
                 padding: EdgeInsets.all(24.0),
                 child: Text(
-                  'Không tìm thấy dữ liệu hồ sơ học sinh liên kết.',
+                  'Không tìm thấy dữ liệu hồ sơ học sinh liên kết cho không gian lớp học này.',
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 16,
@@ -110,16 +109,13 @@ class DashboardScreen extends HookConsumerWidget {
           );
         }
 
-        // 2. Logic ẩn/hiện nút chuyển đổi con 🔄
-        final showSwitchButton =
-            !isStudent &&
-            (userResponse.parentStudents != null &&
-                userResponse.parentStudents!.length > 1);
+        // 🎯 THAY ĐỔI: Chỉ ẩn nút đổi nếu danh sách lớp có từ 1 phần tử trở xuống
+        final showSwitchButton = workspaces.length > 1;
 
-        // 3. Chuẩn hóa dữ liệu điểm danh hôm nay
+        // Chuẩn hóa dữ liệu điểm danh hôm nay
         String attendanceStatusText = 'Chưa có dữ liệu điểm danh';
         final String? recordedAtRaw = activeProfile.todayAttendance?.recordedAt
-            ?.toString();
+            .toString();
         String attendanceTimeText = '--:--';
 
         if (activeProfile.todayAttendance != null) {
@@ -137,7 +133,6 @@ class DashboardScreen extends HookConsumerWidget {
           }
         }
 
-        // Bọc RefreshIndicator để cho phép phụ huynh chủ động kéo xuống tải lại thủ công nếu thích
         return RefreshIndicator(
           color: AppColors.orangeFPT,
           onRefresh: () => ref
@@ -145,7 +140,6 @@ class DashboardScreen extends HookConsumerWidget {
               .fetchUserProfile(isSilent: true),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            // Ép danh sách luôn cho phép vuốt pull-to-refresh
             padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
               vertical: 20.0,
@@ -157,19 +151,20 @@ class DashboardScreen extends HookConsumerWidget {
                 // 1. Thẻ thông tin học sinh
                 StudentProfileCard(
                   studentName: activeProfile.fullName,
-                  className:
-                      activeProfile.currentClass?.className ?? 'Chưa xếp lớp',
+                  className: currentClassName,
                   avatarUrl: activeProfile.avatarUrl,
                   showSwitchButton: showSwitchButton,
                   onSwitchPressed: () => {
                     AppBottomSheet.show(
                       context: context,
-                      title: "Chọn học sinh",
+                      title: "Chọn không gian lớp học",
                       content: ChildListSheetContent(
                         userResponse: userResponse,
-                        initialSelectedIndex: selectedChildIndex,
+                        initialSelectedIndex: safeIndex,
                         onChildSelected: (index) {
-                          ref.read(selectedChildIndexProvider.notifier).state =
+                          ref
+                                  .read(selectedWorkspaceIndexProvider.notifier)
+                                  .state =
                               index;
                         },
                       ),
@@ -198,7 +193,7 @@ class DashboardScreen extends HookConsumerWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // 4. Lưới chứa 4 phím chức năng lớn
+                // 4. Lưới chức năng
                 const UtilityGrid(),
                 const SizedBox(height: 16),
                 ClubActivityCard(),
