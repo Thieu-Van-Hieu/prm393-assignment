@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_fschool_frontend/screen/dashboard_screen.dart';
 import 'package:my_fschool_frontend/screen/profile_screen.dart';
 import 'package:my_fschool_frontend/screen/schedule_screen.dart';
+import 'package:my_fschool_frontend/screen/transcript_screen.dart';
 
 class AppRouteMeta {
   final String title;
@@ -46,8 +47,7 @@ class AppRouteMeta {
       hasBackButton: false,
       icon: Icons.stars_outlined,
       selectedIcon: Icons.stars,
-      builder: (context, state) =>
-          const Center(child: Text('Màn hình Bảng điểm')),
+      builder: (context, state) => TranscriptScreen(),
     ),
     '/profile': AppRouteMeta(
       title: 'Tài khoản',

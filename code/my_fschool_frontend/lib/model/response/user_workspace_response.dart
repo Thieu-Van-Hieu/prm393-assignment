@@ -11,7 +11,7 @@ class UserWorkspaceResponse with UserWorkspaceResponseMappable {
   String classId;
   String className;
   String schoolYear;
-  String roleName; // 'TEACHER' hoặc 'STUDENT'
+  String roleName;
   StudentProfileResponse profile;
 
   UserWorkspaceResponse({

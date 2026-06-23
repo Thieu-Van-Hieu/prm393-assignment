@@ -12,12 +12,9 @@ class ScheduleNotifier extends _$ScheduleNotifier {
 
   @override
   FutureOr<List<ScheduleResponse>> build() async {
-    // Mặc định ban đầu chưa gọi gì thì trả về danh sách rỗng sạch đẹp
     return [];
   }
 
-  /// Hàm lôi lịch học từ API đổ thẳng vào State hệ thống
-  /// - [isSilent]: Nếu `true`, app âm thầm cập nhật ngầm dưới nền mà không bật loading che màn hình
   Future<void> fetchStudentSchedule({
     required String studentId,
     required DateTime date,
