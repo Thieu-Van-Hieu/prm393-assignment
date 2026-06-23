@@ -104,12 +104,13 @@ CREATE TABLE academic_grades
     id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id      UUID REFERENCES students (id) ON DELETE CASCADE,
     subject_name    VARCHAR(50) NOT NULL,
+    subject_type    VARCHAR(20) NOT NULL, -- 🎯 THÊM MỚI: 'NUMERIC' hoặc 'QUALITATIVE'
     semester        VARCHAR(20) NOT NULL, -- 'Học kỳ I', 'Học kỳ II'
     school_year     VARCHAR(20) NOT NULL,
-    frequent_grades TEXT,                 -- Chuỗi lưu điểm thường xuyên: "8,9,7.5"
+    frequent_grades TEXT,                 -- Chuỗi lưu điểm thường xuyên dạng số nguyên sạch: "9,8,10"
     midterm_grade   DECIMAL(3, 1),
     final_grade     DECIMAL(3, 1),
-    overall_grade   VARCHAR(10),
+    overall_grade   VARCHAR(10),          -- Lưu "8.7" đối với NUMERIC hoặc "Đạt" đối với QUALITATIVE
     teacher_comment TEXT
 );
 
@@ -247,7 +248,7 @@ $$
     BEGIN
         -- 1. CHÈN USERS (KHÔNG CÒN CHỨA CỘT ROLE CỐ ĐỊNH)
         INSERT INTO users (id, phone_number, password, full_name, email, address)
-        VALUES (parent1_id, '0395069078', 'Hieu123.', 'Thiều Văn Hiếu', 'thieuefvanwhieues@gmail.com',
+        VALUES (parent1_id, '0395069078', '66771508', 'Thiều Văn Hiếu', 'thieuefvanwhieues@gmail.com',
                 'Yên Phú, Thanh Hóa'),
                (parent2_id, '0944444444', 'parent123', 'Phạm Hồng Nhung', 'nhungph@gmail.com', 'Thanh Xuân, Hà Nội'),
                (user_student1_id, '0911111111', 'student123', 'Thiều Văn Khôi', 'khoind@fschool.edu.vn', NULL),
@@ -319,12 +320,16 @@ $$
                (student2_id, slot4_id, CURRENT_DATE, 'PENDING');
 
         -- 7. ĐIỂM SỐ HỌC VẬT
-        INSERT INTO academic_grades (student_id, subject_name, semester, school_year, frequent_grades, midterm_grade,
-                                     final_grade, overall_grade, teacher_comment)
-        VALUES (student1_id, 'Toán Học', 'Học kỳ II', '2025-2026', '9.0,8.5,10.0', 9.0, 9.5, 'A+',
-                'Con học toán rất tốt, tư duy logic nhanh nhẹn.'),
-               (student3_id, 'Toán Học', 'Học kỳ II', '2025-2026', '8.0,8.0,7.5', 8.0, 8.5, 'A',
-                'Ngoan ngoãn, tập trung nghe giảng.');
+        INSERT INTO academic_grades (student_id, subject_name, subject_type, semester, school_year, frequent_grades,
+                                     midterm_grade, final_grade, overall_grade, teacher_comment)
+        VALUES
+            -- Môn tính điểm (NUMERIC) - Điểm thường xuyên lưu số nguyên sạch sẽ
+            (student1_id, 'Toán Học', 'NUMERIC', 'Học kỳ II', '2025-2026', '9,8,10', 9.0, 9.5, '8.7',
+             'Con học toán rất tốt, tư duy logic nhanh nhẹn.'),
+
+            -- Môn định tính (QUALITATIVE) - Không có điểm thành phần, overall_grade lưu chữ "Đạt"
+            (student1_id, 'Vovinam', 'QUALITATIVE', 'Học kỳ II', '2025-2026', NULL, NULL, NULL, 'Đạt',
+             'Nắm vững các tư thế tấn pháp, hoàn thành tốt bài quyền.');
 
         -- 8. SỰ KIỆN TRƯỜNG & ĐĂNG KÝ
         INSERT INTO events (id, badge, title, base64_image, description)

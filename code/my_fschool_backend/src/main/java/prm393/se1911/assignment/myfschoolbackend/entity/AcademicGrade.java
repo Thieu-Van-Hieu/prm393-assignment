@@ -49,5 +49,6 @@ public class AcademicGrade {
     @Column(name = "teacher_comment", length = Integer.MAX_VALUE)
     private String teacherComment;
 
-
+    @Column(name = "subject_type", nullable = false, length = 20)
+    private String subjectType;
 }
