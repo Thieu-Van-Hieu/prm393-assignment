@@ -33,9 +33,6 @@ public class Class {
     private User homeroomTeacher;
 
     @OneToMany(mappedBy = "classField")
-    private Set<StudentClass> studentClasses = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "classField")
     private Set<TimetableSlot> timetableSlots = new LinkedHashSet<>();
 
 

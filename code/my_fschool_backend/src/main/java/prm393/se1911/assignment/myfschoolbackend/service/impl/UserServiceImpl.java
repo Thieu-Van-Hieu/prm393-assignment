@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 .classId(classField.getId().toString())
                 .className(classField.getClassName())
                 .schoolYear(classField.getSchoolYear())
-                .roleName(uc.getRole())
+                .roleName(uc.getRole().getRoleName())
                 .profile(studentProfileResponse)
                 .build();
     }

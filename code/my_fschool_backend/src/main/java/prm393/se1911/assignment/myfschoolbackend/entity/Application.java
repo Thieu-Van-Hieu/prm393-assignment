@@ -9,6 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -50,6 +51,17 @@ public class Application {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "submitted_at")
     private Timestamp submittedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "handler_id")
+    private User handler;
+
+    @Column(name = "school_response", length = Integer.MAX_VALUE)
+    private String schoolResponse;
+
+    @Column(name = "processed_at")
+    private OffsetDateTime processedAt;
 
 
 }

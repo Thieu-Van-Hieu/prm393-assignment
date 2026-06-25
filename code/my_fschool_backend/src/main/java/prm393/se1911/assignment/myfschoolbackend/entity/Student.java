@@ -49,17 +49,6 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private Set<ClubMember> clubMembers = new LinkedHashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "parent_student", // Ép Hibernate tìm đúng bảng này trong Postgres
-            joinColumns = @JoinColumn(name = "student_id"), // Khớp với trường trong DB của bạn
-            inverseJoinColumns = @JoinColumn(name = "parent_id") // Khớp với trường trong DB của bạn
-    )
-    private Set<User> parents = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "student")
-    private Set<StudentClass> studentClasses = new LinkedHashSet<>();
-
     @OneToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")

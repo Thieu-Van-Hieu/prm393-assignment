@@ -17,19 +17,25 @@ public interface TimetableSlotRepository extends JpaRepository<TimetableSlot, UU
             SELECT
                 ts.id AS slotId,
                 ts.subject_name AS subjectName,
-                ts.teacher_name AS teacherName,
+                ts.teacher_id AS teacherId,
+                u.full_name AS teacherName, -- 🎯 THÊM: Lấy tên thật của giáo viên từ bảng users
                 ts.room_name AS roomName,
                 ts.slot_number AS slotNumber,
                 ts.start_time AS startTime,
                 ts.end_time AS endTime,
                 COALESCE(a.status, 'PENDING') AS attendanceStatus
             FROM timetable_slots ts
-            JOIN student_class sc ON ts.class_id = sc.class_id
+            -- 🎯 THAY ĐỔI: Chuyển từ student_class sang user_class và map qua student_profile_id
+            JOIN user_class uc ON ts.class_id = uc.class_id
+            -- 🎯 THÊM: JOIN sang bảng users để lấy thông tin hiển thị của Giáo viên dạy tiết đó
+            LEFT JOIN users u ON ts.teacher_id = u.id
             LEFT JOIN attendance a ON ts.id = a.slot_id
                 AND a.student_id = :studentId
                 AND a.attendance_date = :date
-            WHERE sc.student_id = :studentId
-              AND sc.status = 'ACTIVE'
+            WHERE uc.student_profile_id = :studentId
+              AND uc.status = 'ACTIVE'
+              -- 🎯 KHÓA BẢO MẬT: Đảm bảo bản ghi trong user_class là tư cách STUDENT học vụ
+              AND uc.role_id = '00000000-0000-0000-0000-000000000001'::uuid
               AND ts.day_of_week = EXTRACT(ISODOW FROM CAST(:date AS DATE))
             ORDER BY ts.slot_number
             """, nativeQuery = true)

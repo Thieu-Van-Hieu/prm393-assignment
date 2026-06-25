@@ -30,9 +30,6 @@ public class TimetableSlot {
     @Column(name = "subject_name", nullable = false, length = 50)
     private String subjectName;
 
-    @Column(name = "teacher_name", length = 100)
-    private String teacherName;
-
     @Column(name = "room_name", length = 20)
     private String roomName;
 
@@ -51,5 +48,8 @@ public class TimetableSlot {
     @OneToMany(mappedBy = "slot")
     private Set<Attendance> attendances = new LinkedHashSet<>();
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
 }

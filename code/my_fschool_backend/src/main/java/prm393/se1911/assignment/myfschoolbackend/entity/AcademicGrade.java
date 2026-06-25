@@ -51,4 +51,9 @@ public class AcademicGrade {
 
     @Column(name = "subject_type", nullable = false, length = 20)
     private String subjectType;
+   
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
 }

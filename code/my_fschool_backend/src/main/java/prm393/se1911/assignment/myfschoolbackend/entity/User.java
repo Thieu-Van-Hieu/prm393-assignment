@@ -52,9 +52,6 @@ public class User {
     @OneToMany(mappedBy = "parent")
     private Set<EventRegistration> eventRegistrations = new LinkedHashSet<>();
 
-    @ManyToMany(mappedBy = "parents")
-    private Set<Student> students = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "user")
     private Set<UserDeviceToken> userDeviceTokens = new LinkedHashSet<>();
 
