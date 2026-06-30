@@ -1,25 +1,28 @@
 package prm393.se1911.assignment.myfschoolbackend.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "applications")
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Application {
     @Id
-    @ColumnDefault("uuid_generate_v4()")
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -61,7 +64,12 @@ public class Application {
     private String schoolResponse;
 
     @Column(name = "processed_at")
-    private OffsetDateTime processedAt;
+    private Timestamp processedAt;
 
-
+    @PrePersist
+    protected void onCreate() {
+        if (this.submittedAt == null) {
+            this.submittedAt = new Timestamp(Instant.now().toEpochMilli());
+        }
+    }
 }
