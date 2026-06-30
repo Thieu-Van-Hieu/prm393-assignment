@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_fschool_frontend/screen/application_screen.dart';
 import 'package:my_fschool_frontend/screen/dashboard_screen.dart';
 import 'package:my_fschool_frontend/screen/profile_screen.dart';
 import 'package:my_fschool_frontend/screen/schedule_screen.dart';
@@ -58,12 +59,11 @@ class AppRouteMeta {
       builder: (context, state) => const Center(child: ProfileScreen()),
     ),
     '/application': AppRouteMeta(
-      title: 'Chi tiết đơn từ',
+      title: 'Đơn từ',
       tabIndex: 0,
       hasBackButton: true,
       isNavBarItem: false,
-      builder: (context, state) =>
-          const Center(child: Text('Nội dung chi tiết đơn từ')),
+      builder: (context, state) => ApplicationScreen(),
     ),
     '/event': AppRouteMeta(
       title: 'Chi tiết sự kiện',

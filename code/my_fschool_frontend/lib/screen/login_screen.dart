@@ -24,8 +24,9 @@ class LoginScreen extends HookWidget {
     final dialogFormKey = useMemoized(
       () => GlobalKey<FormState>(),
     ); // FormKey riêng cho Dialog
-    final phoneController = useTextEditingController();
-    final passwordController = useTextEditingController();
+    //TODO: Thiết lập phone, password mặc định khi debug để test nhanh
+    final phoneController = useTextEditingController(text: "0395069078");
+    final passwordController = useTextEditingController(text: "66771508");
     final forgotPhoneController = useTextEditingController();
     final isLoading = useState(false);
 
