@@ -50,7 +50,6 @@ class AppDateRange extends StatelessWidget {
               builder: (context, child) {
                 return Theme(
                   data: Theme.of(context).copyWith(
-                    useMaterial3: true,
                     colorScheme: const ColorScheme.light(
                       primary: AppColors.orangeFPT,
                       onPrimary: Colors.white,

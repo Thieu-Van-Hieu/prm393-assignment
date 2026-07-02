@@ -52,7 +52,7 @@ class CreateApplicationSheetContent extends HookWidget {
             ),
           ),
           DropdownButtonFormField<String>(
-            value: selectedTypeCode.value,
+            initialValue: selectedTypeCode.value,
             icon: const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: AppColors.textSecondary,
