@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/enum/subject_type.dart';
 
 part 'academic_grade_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class AcademicGradeResponse with AcademicGradeResponseMappable {
   final String subjectName;
   final SubjectType type;

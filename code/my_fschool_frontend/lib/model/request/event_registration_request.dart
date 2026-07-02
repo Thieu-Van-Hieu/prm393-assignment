@@ -2,10 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'event_registration_request.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.encode,
-)
+@MappableClass(generateMethods: GenerateMethods.encode)
 class EventRegistrationRequest with EventRegistrationRequestMappable {
   final String eventId;
   final int numberOfTickets;

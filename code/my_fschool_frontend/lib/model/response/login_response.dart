@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/model/request/login_request.dart';
 
 part 'login_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class LoginResponse with LoginRequestMappable {
   final String userid;
   final String fullName;

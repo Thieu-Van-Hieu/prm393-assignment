@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/model/response/user_workspace_response.dart'
 
 part 'user_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class UserResponse with UserResponseMappable {
   String id;
   String fullName;

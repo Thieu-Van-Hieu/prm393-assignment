@@ -2,10 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'class_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class ClassResponse with ClassResponseMappable {
   String id;
   String className;

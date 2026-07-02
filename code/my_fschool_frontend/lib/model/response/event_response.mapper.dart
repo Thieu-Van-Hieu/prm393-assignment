@@ -33,7 +33,6 @@ class EventResponseMapper extends ClassMapperBase<EventResponse> {
   static const Field<EventResponse, String> _f$base64Image = Field(
     'base64Image',
     _$base64Image,
-    key: r'base64image',
     opt: true,
   );
   static String? _$description(EventResponse v) => v.description;

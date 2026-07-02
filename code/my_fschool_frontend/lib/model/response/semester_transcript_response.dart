@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/model/response/academic_grade_response.dart'
 
 part 'semester_transcript_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class SemesterTranscriptResponse with SemesterTranscriptResponseMappable {
   final String semesterName;
   final List<AcademicGradeResponse> academicGrades;

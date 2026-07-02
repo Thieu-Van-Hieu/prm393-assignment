@@ -7,10 +7,7 @@ import 'package:my_fschool_frontend/model/response/event_property_response.dart'
 
 part 'event_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class EventResponse with EventResponseMappable {
   final String id;
   final String badge;

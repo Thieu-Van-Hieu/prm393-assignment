@@ -6,10 +6,7 @@ import 'club_response.dart';
 
 part 'student_profile_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class StudentProfileResponse with StudentProfileResponseMappable {
   String id;
   String studentCode;

@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/enum/attendance_status.dart';
 
 part 'schedule_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class ScheduleResponse with ScheduleResponseMappable {
   final String slotId;
   final String subjectName;

@@ -3,10 +3,7 @@ import 'package:my_fschool_frontend/model/response/student_profile_response.dart
 
 part 'user_workspace_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class UserWorkspaceResponse with UserWorkspaceResponseMappable {
   String classId;
   String className;

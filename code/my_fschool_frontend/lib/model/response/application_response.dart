@@ -3,7 +3,6 @@ import 'package:dart_mappable/dart_mappable.dart';
 part 'application_response.mapper.dart';
 
 @MappableClass(
-  caseStyle: CaseStyle.camelCase,
   generateMethods:
       GenerateMethods.decode, // Chỉ tạo hàm decode (fromJson/fromMap) giống mẫu
 )

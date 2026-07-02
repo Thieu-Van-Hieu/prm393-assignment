@@ -2,10 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 part 'attendance_response.mapper.dart';
 
-@MappableClass(
-  caseStyle: CaseStyle.camelCase,
-  generateMethods: GenerateMethods.decode,
-)
+@MappableClass(generateMethods: GenerateMethods.decode)
 class AttendanceResponse with AttendanceResponseMappable {
   String id;
   DateTime attendanceDate;

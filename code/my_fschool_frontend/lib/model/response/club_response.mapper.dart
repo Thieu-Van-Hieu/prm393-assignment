@@ -29,10 +29,28 @@ class ClubResponseMapper extends ClassMapperBase<ClubResponse> {
     'clubName',
     _$clubName,
   );
+  static String? _$description(ClubResponse v) => v.description;
+  static const Field<ClubResponse, String> _f$description = Field(
+    'description',
+    _$description,
+    opt: true,
+  );
+  static String? _$base64Image(ClubResponse v) => v.base64Image;
+  static const Field<ClubResponse, String> _f$base64Image = Field(
+    'base64Image',
+    _$base64Image,
+    opt: true,
+  );
   static String? _$schedules(ClubResponse v) => v.schedules;
   static const Field<ClubResponse, String> _f$schedules = Field(
     'schedules',
     _$schedules,
+    opt: true,
+  );
+  static String? _$role(ClubResponse v) => v.role;
+  static const Field<ClubResponse, String> _f$role = Field(
+    'role',
+    _$role,
     opt: true,
   );
 
@@ -40,14 +58,20 @@ class ClubResponseMapper extends ClassMapperBase<ClubResponse> {
   final MappableFields<ClubResponse> fields = const {
     #id: _f$id,
     #clubName: _f$clubName,
+    #description: _f$description,
+    #base64Image: _f$base64Image,
     #schedules: _f$schedules,
+    #role: _f$role,
   };
 
   static ClubResponse _instantiate(DecodingData data) {
     return ClubResponse(
       id: data.dec(_f$id),
       clubName: data.dec(_f$clubName),
+      description: data.dec(_f$description),
+      base64Image: data.dec(_f$base64Image),
       schedules: data.dec(_f$schedules),
+      role: data.dec(_f$role),
     );
   }
 
