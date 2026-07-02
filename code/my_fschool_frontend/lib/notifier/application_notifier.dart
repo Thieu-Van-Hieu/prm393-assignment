@@ -17,7 +17,7 @@ class ApplicationNotifier extends _$ApplicationNotifier {
   }
 
   /// 🎯 Lấy danh sách đơn từ của Phụ huynh nộp (gọi từ màn hình chính)
-  Future<void> fetchParentApplications({bool isSilent = false}) async {
+  Future<void> fetchParentApplications({bool isSilent = true}) async {
     if (!isSilent) {
       state = const AsyncLoading();
     }

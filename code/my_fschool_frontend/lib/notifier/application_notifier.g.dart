@@ -35,7 +35,7 @@ final class ApplicationNotifierProvider
 }
 
 String _$applicationNotifierHash() =>
-    r'0245ecd9ff74b9eec645faeb2ab8d774c241205f';
+    r'83e96a07ca15534f62237a641b503d91542c9ba5';
 
 abstract class _$ApplicationNotifier
     extends $AsyncNotifier<List<ApplicationResponse>> {
