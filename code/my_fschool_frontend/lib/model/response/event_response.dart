@@ -34,7 +34,8 @@ class EventResponse with EventResponseMappable {
   Uint8List? get memoryImage {
     if (base64Image == null ||
         base64Image!.trim().isEmpty ||
-        base64Image!.contains('_holder')) {
+        base64Image!.contains('holder')) {
+      // 🎯 Sửa chỗ này một chút để nhận diện chữ 'holder' trong SQL của bạn
       return null;
     }
     try {
@@ -44,36 +45,73 @@ class EventResponse with EventResponseMappable {
     }
   }
 
-  // 3. Fallback Icon thông minh dựa trên tên phân loại của Badge
+  // 3. 🎯 Map Icon thông minh khớp 100% với Data SQL mẫu của bạn
   IconData get fallbackIcon {
     final lowerBadge = badge.toLowerCase();
-    if (lowerBadge.contains('thao') ||
-        lowerBadge.contains('bơi') ||
-        lowerBadge.contains('sport')) {
-      return Icons.pool_rounded;
+    final lowerTitle = title.toLowerCase();
+
+    // Nhóm 1: Hội thao / Thể thao
+    if (lowerBadge.contains('thao') || lowerTitle.contains('bóng đá')) {
+      return Icons.sports_soccer_rounded;
     }
+    // Nhóm 2: Hội thảo / Định hướng / Học thuật
+    if (lowerBadge.contains('thảo') ||
+        lowerTitle.contains('công nghệ') ||
+        lowerTitle.contains('học')) {
+      return Icons.co_present_rounded;
+    }
+    // Nhóm 3: Triển lãm / Mỹ thuật / Tranh ảnh
+    if (lowerBadge.contains('lãm') ||
+        lowerTitle.contains('mỹ thuật') ||
+        lowerTitle.contains('sách')) {
+      return Icons.palette_rounded;
+    }
+    // Nhóm 4: Hội rằm / Trung thu / Lễ hội truyền thống
+    if (lowerBadge.contains('rằm') ||
+        lowerTitle.contains('trăng rằm') ||
+        lowerTitle.contains('trung thu')) {
+      return Icons
+          .brightness_3_rounded; // Icon trăng khuyết rất hợp với Trung Thu
+    }
+    // Nhóm 5: Các từ khóa trại hè, dã ngoại
     if (lowerBadge.contains('trại') || lowerBadge.contains('văn hóa')) {
       return Icons.gite_rounded;
     }
-    if (lowerBadge.contains('học') || lowerBadge.contains('thi')) {
-      return Icons.menu_book_rounded;
-    }
-    return Icons.star_rounded; // Mặc định nếu không khớp từ khóa
+
+    return Icons.event_rounded; // Icon mặc định nhìn lịch lãm hơn star_rounded
   }
 
-  // 4. Giải thuật băm màu sắc động dựa vào text của Badge (Không lo hardcode)
+  // 4. 🎯 Thay vì băm màu ngẫu nhiên dễ ra màu tối/xấu, ta map dải màu tươi sáng theo Badge thực tế
   Color get dynamicPrimaryColor {
+    final lowerBadge = badge.toLowerCase();
+
+    if (lowerBadge.contains('thao')) {
+      return const Color(0xFFE65100); // Cam thể thao năng động (Orange)
+    }
+    if (lowerBadge.contains('thảo')) {
+      return const Color(0xFF0D47A1); // Xanh dương tri thức (Blue)
+    }
+    if (lowerBadge.contains('lãm')) {
+      return const Color(0xFF4A148C); // Tím nghệ thuật, triển lãm (Purple)
+    }
+    if (lowerBadge.contains('rằm')) {
+      return const Color(0xFFFFB300); // Vàng trung thu rực rỡ (Amber)
+    }
+
+    // Thuật toán băm dự phòng nếu phát sinh badge mới (Đã tinh chỉnh để ra màu sáng đẹp)
     int hash = 0;
     for (int i = 0; i < badge.length; i++) {
       hash = badge.codeUnitAt(i) + ((hash << 5) - hash);
     }
-    // Tạo màu từ mã băm và ép độ sáng vừa phải để làm tông màu chính
-    return Color((hash & 0x00FFFFFF) | 0xFF000000).withValues(alpha: 0.85);
+    return HSLColor.fromColor(Color((hash & 0x00FFFFFF) | 0xFF000000))
+        .withLightness(0.4) // Giữ độ sáng vừa phải để thấy rõ chữ trắng
+        .withSaturation(0.7) // Giữ màu sắc tươi tắn
+        .toColor();
   }
 
   // 5. Cố định màu nền Card về màu trung tính cao cấp (Sạch sẽ, tôn ảnh banner)
   Color get dynamicCardColor {
-    return const Color(0xFFF4F6F9); // Màu xám trắng sữa trung tính cực sạch
+    return const Color(0xFFF8F9FA); // Xám trắng sữa siêu nhẹ chống mỏi mắt
   }
 
   static EventResponse fromJson(String json) {

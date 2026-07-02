@@ -15,16 +15,24 @@ class InfoSheetContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final workspace = profile.userWorkspaceResponses[workspaceIndex];
+    String roleName = "Chưa xác định";
+    switch (workspace.roleName.trim()) {
+      case "PARENT":
+        roleName = "Phụ huynh";
+        break;
+      case "STUDENT":
+        roleName = "Học sinh";
+        break;
+      default:
+        roleName = "Chưa xác định";
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildInfoRow('Họ và tên', profile.fullName),
         _buildInfoRow('Số điện thoại liên hệ', profile.phoneNumber),
         _buildInfoRow('Email', profile.email),
-        _buildInfoRow(
-          'Vai trò',
-          workspace.roleName == "PARENT" ? "Phụ huynh" : workspace.roleName,
-        ),
+        _buildInfoRow('Vai trò', roleName),
       ],
     );
   }
