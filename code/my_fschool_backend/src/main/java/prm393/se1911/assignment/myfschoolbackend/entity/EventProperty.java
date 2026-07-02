@@ -30,5 +30,4 @@ public class EventProperty {
     @Column(name = "property_value", nullable = false)
     private String propertyValue;
 
-
 }
