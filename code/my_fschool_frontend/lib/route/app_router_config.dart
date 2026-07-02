@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_fschool_frontend/screen/application_screen.dart';
 import 'package:my_fschool_frontend/screen/dashboard_screen.dart';
+import 'package:my_fschool_frontend/screen/event_screen.dart';
 import 'package:my_fschool_frontend/screen/profile_screen.dart';
 import 'package:my_fschool_frontend/screen/schedule_screen.dart';
 import 'package:my_fschool_frontend/screen/transcript_screen.dart';
@@ -66,12 +67,11 @@ class AppRouteMeta {
       builder: (context, state) => ApplicationScreen(),
     ),
     '/event': AppRouteMeta(
-      title: 'Chi tiết sự kiện',
+      title: 'Sự kiện',
       tabIndex: 0,
       hasBackButton: true,
       isNavBarItem: false,
-      builder: (context, state) =>
-          const Center(child: Text('Nội dung chi tiết sự kiện')),
+      builder: (context, state) => EventScreen(),
     ),
     '/club': AppRouteMeta(
       title: 'Chi tiết câu lạc bộ',
