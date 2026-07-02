@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void changePassword(String userId, ChangePasswordRequest changePasswordRequest) {
+    public void changePassword(UUID userId, ChangePasswordRequest changePasswordRequest) {
 
         String oldPassword = changePasswordRequest.oldPassword();
         String newPassword = changePasswordRequest.newPassword();
@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("Vui lòng cung cấp mật khẩu cũ và mật khẩu mới hợp lệ!");
         }
 
-        Optional<User> userOptional = userRepository.findById(UUID.fromString(userId));
+        Optional<User> userOptional = userRepository.findById(userId);
 
         if (userOptional.isEmpty()) {
             throw new IllegalArgumentException("Người dùng không tồn tại! Vui lòng đăng nhập lại.");

@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import prm393.se1911.assignment.myfschoolbackend.exception.UnauthorizedException;
 import prm393.se1911.assignment.myfschoolbackend.model.request.ChangePasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
@@ -12,6 +11,7 @@ import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
 import prm393.se1911.assignment.myfschoolbackend.model.response.UserResponse;
 import prm393.se1911.assignment.myfschoolbackend.service.AuthService;
 import prm393.se1911.assignment.myfschoolbackend.service.UserService;
+import prm393.se1911.assignment.myfschoolbackend.util.SessionUtils;
 
 import java.util.Map;
 import java.util.UUID;
@@ -54,11 +54,7 @@ public class AuthController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, HttpSession session) {
         // Lấy USER_ID của ông phụ huynh đang đăng nhập từ Session (được Interceptor đảm bảo bảo mật)
-        Object userIdObj = session.getAttribute("USER_ID");
-        if (userIdObj == null) {
-            throw new UnauthorizedException("Bạn phải đăng nhập để thực hiện hành động này!");
-        }
-        String userId = userIdObj.toString();
+        UUID userId = SessionUtils.getUserIdFromSession(session);
 
         // Gọi xuống service xử lý kiểm tra và đổi pass
         authService.changePassword(userId, changePasswordRequest);
@@ -68,13 +64,9 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpSession session) {
-        Object userIdObj = session.getAttribute("USER_ID");
-        if (userIdObj == null) {
-            throw new UnauthorizedException("Bạn phải đăng nhập để thực hiện hành động này!");
-        }
-        String userId = userIdObj.toString();
+        UUID userId = SessionUtils.getUserIdFromSession(session);
 
-        UserResponse userResponse = userService.getUserContext(UUID.fromString(userId));
+        UserResponse userResponse = userService.getUserContext(userId);
 
         return ResponseEntity.ok(userResponse);
     }

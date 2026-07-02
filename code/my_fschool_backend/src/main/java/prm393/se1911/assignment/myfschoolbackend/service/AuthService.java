@@ -5,10 +5,12 @@ import prm393.se1911.assignment.myfschoolbackend.model.request.ForgotPasswordReq
 import prm393.se1911.assignment.myfschoolbackend.model.request.LoginRequest;
 import prm393.se1911.assignment.myfschoolbackend.model.response.LoginResponse;
 
+import java.util.UUID;
+
 public interface AuthService {
     LoginResponse authenticate(LoginRequest loginRequest);
 
     void resetPassword(ForgotPasswordRequest forgotPasswordRequest);
 
-    void changePassword(String userId, ChangePasswordRequest changePasswordRequest);
+    void changePassword(UUID userId, ChangePasswordRequest changePasswordRequest);
 }
