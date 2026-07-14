@@ -93,152 +93,147 @@ class ProfileScreen extends HookConsumerWidget {
           );
         }
 
-        return Scaffold(
-          body: SafeArea(
-            child: Container(
-              alignment: Alignment.topCenter,
-              width: double.infinity,
-              height: double.infinity,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24.0,
-                  vertical: 20.0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // 📦 KHỐI MENU CHỨA CÁC TÙY CHỌN
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.02),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          // Hàng 1: Thông tin cá nhân
-                          ListTile(
-                            onTap: () {
-                              AppBottomSheet.show(
-                                context: context,
-                                title: 'Thông tin cá nhân',
-                                content: InfoSheetContent(
-                                  profile: profile,
-                                  // 🎯 ĐẬP DỮ LIỆU ĐÃ ĐƯỢC CHUẨN HÓA AN TOÀN VÀO ĐÂY
-                                  workspaceIndex: selectedChildIndex,
-                                ),
-                              );
-                            },
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 6,
-                            ),
-                            title: const Text(
-                              'Thông tin cá nhân',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
-                                fontFamily: 'Asap',
+        return SafeArea(
+          child: Container(
+            alignment: Alignment.topCenter,
+            width: double.infinity,
+            height: double.infinity,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 20.0,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // 📦 KHỐI MENU CHỨA CÁC TÙY CHỌN
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.02),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // Hàng 1: Thông tin cá nhân
+                        ListTile(
+                          onTap: () {
+                            AppBottomSheet.show(
+                              context: context,
+                              title: 'Thông tin cá nhân',
+                              content: InfoSheetContent(
+                                profile: profile,
+                                // 🎯 ĐẬP DỮ LIỆU ĐÃ ĐƯỢC CHUẨN HÓA AN TOÀN VÀO ĐÂY
+                                workspaceIndex: selectedChildIndex,
                               ),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
+                            );
+                          },
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 6,
+                          ),
+                          title: const Text(
+                            'Thông tin cá nhân',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
                               color: AppColors.textPrimary,
+                              fontFamily: 'Asap',
                             ),
                           ),
-
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Divider(height: 1, color: AppColors.divider),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: AppColors.textPrimary,
                           ),
+                        ),
 
-                          // Hàng 2: Đổi mật khẩu
-                          ListTile(
-                            onTap: () {
-                              AppBottomSheet.show(
-                                context: context,
-                                title: 'Đổi mật khẩu',
-                                content: ChangePasswordSheetContent(
-                                  isLoading: isChangingPassword.value,
-                                  onSubmitted: (oldPass, newPass) async {
-                                    isChangingPassword.value = true;
-                                    final result = await authApi.changePassword(
-                                      ChangePasswordRequest(
-                                        oldPassword: oldPass.trim(),
-                                        newPassword: newPass.trim(),
-                                      ),
-                                    );
-                                    isChangingPassword.value = false;
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Divider(height: 1, color: AppColors.divider),
+                        ),
 
-                                    if (!context.mounted) return;
+                        // Hàng 2: Đổi mật khẩu
+                        ListTile(
+                          onTap: () {
+                            AppBottomSheet.show(
+                              context: context,
+                              title: 'Đổi mật khẩu',
+                              content: ChangePasswordSheetContent(
+                                isLoading: isChangingPassword.value,
+                                onSubmitted: (oldPass, newPass) async {
+                                  isChangingPassword.value = true;
+                                  final result = await authApi.changePassword(
+                                    ChangePasswordRequest(
+                                      oldPassword: oldPass.trim(),
+                                      newPassword: newPass.trim(),
+                                    ),
+                                  );
+                                  isChangingPassword.value = false;
 
-                                    if (result.hasError) {
-                                      AppSnackbar.showOpacityError(
-                                        context,
-                                        result.errorMessage!,
-                                      );
-                                      return;
-                                    }
+                                  if (!context.mounted) return;
 
-                                    final response = result.data;
-                                    String successMsg =
-                                        response?.data['message'] ??
-                                        "Đổi mật khẩu thành công!";
-                                    AppSnackbar.showSuccess(
+                                  if (result.hasError) {
+                                    AppSnackbar.showOpacityError(
                                       context,
-                                      successMsg,
+                                      result.errorMessage!,
                                     );
-                                    Navigator.of(context).pop(true);
-                                  },
-                                ),
-                              );
-                            },
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 6,
-                            ),
-                            title: const Text(
-                              'Đổi mật khẩu',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
-                                fontFamily: 'Asap',
+                                    return;
+                                  }
+
+                                  final response = result.data;
+                                  String successMsg =
+                                      response?.data['message'] ??
+                                      "Đổi mật khẩu thành công!";
+                                  AppSnackbar.showSuccess(context, successMsg);
+                                  Navigator.of(context).pop(true);
+                                },
                               ),
-                            ),
-                            trailing: const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
+                            );
+                          },
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 6,
+                          ),
+                          title: const Text(
+                            'Đổi mật khẩu',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
                               color: AppColors.textPrimary,
+                              fontFamily: 'Asap',
                             ),
                           ),
-                        ],
-                      ),
+                          trailing: const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
                     ),
+                  ),
 
-                    const SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
-                    // 🛑 NÚT ĐĂNG XUẤT TONAL STYLE
-                    AppButton(
-                      text: 'Đăng xuất',
-                      size: AppButtonSize.medium,
-                      type: AppButtonType.danger,
-                      style: AppButtonStyle.tonal,
-                      onPressed: handleLogout,
-                    ),
-                  ],
-                ),
+                  // 🛑 NÚT ĐĂNG XUẤT TONAL STYLE
+                  AppButton(
+                    text: 'Đăng xuất',
+                    size: AppButtonSize.medium,
+                    type: AppButtonType.danger,
+                    style: AppButtonStyle.tonal,
+                    onPressed: handleLogout,
+                  ),
+                ],
               ),
             ),
           ),
