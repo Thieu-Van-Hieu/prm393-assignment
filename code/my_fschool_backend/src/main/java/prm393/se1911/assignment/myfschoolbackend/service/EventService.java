@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventService {
-    List<EventResponse> getAllEvents();
+    List<EventResponse> getAllEvents(UUID parentId);
 
     void registerEvent(UUID parentId, EventRegistrationRequest request);
 }

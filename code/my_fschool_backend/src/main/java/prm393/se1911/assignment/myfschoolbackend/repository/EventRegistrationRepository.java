@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface EventRegistrationRepository extends JpaRepository<EventRegistration, UUID> {
     EventRegistration findByParentIdAndEventId(UUID parentId, UUID eventId);
+
+    boolean existsByParentIdAndEventId(UUID parentId, UUID eventId);
 }

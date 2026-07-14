@@ -15,14 +15,20 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final imageBytes = event.memoryImage;
+    final bool isRegistered =
+        event.isRegistered; // An toàn nếu trường này bị null
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         color: event.dynamicCardColor,
         borderRadius: BorderRadius.circular(16),
-        // 🌟 Thêm viền nhẹ bao quanh card để tạo ranh giới UI rõ ràng
-        border: Border.all(color: const Color(0xFFE3EDF5), width: 1.5),
+        border: Border.all(
+          color: isRegistered
+              ? const Color(0xFFC2E7D9)
+              : const Color(0xFFE3EDF5),
+          width: 1.5,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,34 +38,77 @@ class EventCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Khối hiển thị phân loại Badge tên ngắn gọn
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: event.dynamicPrimaryColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    event.badge,
-                    style: const TextStyle(
-                      fontFamily: 'Asap',
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                // 1. Khối hiển thị Badge phân loại & Trạng thái đăng ký
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Badge phân loại sự kiện
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: event.dynamicPrimaryColor,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        event.badge,
+                        style: const TextStyle(
+                          fontFamily: 'Asap',
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+
+                    // 🌟 Badge "Đã đăng ký" hiển thị ở góc phải nếu người dùng đã tham gia
+                    if (isRegistered)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE8F5E9), // Nền xanh lá nhạt
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: const Color(0xFF81C784),
+                            width: 1,
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 14,
+                              color: Color(0xFF2E7D32),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              'Đã đăng ký',
+                              style: TextStyle(
+                                fontFamily: 'Asap',
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF2E7D32),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 16),
 
-                // 2. Khu vực hình ảnh: Phóng to ra và bao phủ toàn bộ chiều rộng
+                // 2. Khu vực hình ảnh
                 Center(
                   child: imageBytes != null
                       ? Container(
                           width: double.infinity,
-                          height: 160, // 🌟 Tăng size ảnh to rõ ràng hơn
+                          height: 160,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -132,8 +181,8 @@ class EventCard extends StatelessWidget {
             ),
           ),
 
-          // 5. Nút bấm Đăng ký nếu sự kiện chưa kết thúc
-          if (event.isUpcoming) ...[
+          // 5. Nút bấm Đăng ký chỉ hiển thị khi: Sự kiện sắp diễn ra VÀ CHƯA đăng ký
+          if (event.isUpcoming && !isRegistered) ...[
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: SizedBox(

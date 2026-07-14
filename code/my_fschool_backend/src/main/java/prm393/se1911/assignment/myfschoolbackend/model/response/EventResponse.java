@@ -14,6 +14,7 @@ public record EventResponse(
         String base64Image,
         String description,
         Instant createdAt,
+        boolean isRegistered,
         List<EventPropertyResponse> eventProperties
 ) {
 }

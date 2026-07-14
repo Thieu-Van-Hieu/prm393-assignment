@@ -20,8 +20,8 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getEvents() {
-        return ResponseEntity.ok(eventService.getAllEvents());
+    public ResponseEntity<List<EventResponse>> getEvents(HttpSession session) {
+        return ResponseEntity.ok(eventService.getAllEvents(SessionUtils.getUserIdFromSession(session)));
     }
 
     @PostMapping("/register")

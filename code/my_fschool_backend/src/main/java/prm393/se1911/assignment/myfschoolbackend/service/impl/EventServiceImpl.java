@@ -34,16 +34,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponse> getAllEvents() {
+    public List<EventResponse> getAllEvents(UUID parentId) {
         return eventRepository.findAll()
-                .stream().map(event -> EventResponse.builder()
-                        .id(event.getId())
-                        .badge(event.getBadge())
-                        .title(event.getTitle())
-                        .base64Image(event.getBase64Image())
-                        .description(event.getDescription())
-                        .eventProperties(toEventPropertyResponseList(event))
-                        .build())
+                .stream().map(event -> {
+                    final var isExist = eventRegistrationRepository.existsByParentIdAndEventId(parentId, event.getId());
+
+                    return EventResponse.builder()
+                            .id(event.getId())
+                            .badge(event.getBadge())
+                            .title(event.getTitle())
+                            .base64Image(event.getBase64Image())
+                            .description(event.getDescription())
+                            .isRegistered(isExist)
+                            .eventProperties(toEventPropertyResponseList(event))
+                            .build();
+                })
                 .toList();
     }
 

@@ -14,6 +14,7 @@ class EventResponse with EventResponseMappable {
   final String title;
   final String? base64Image;
   final String? description;
+  final bool isRegistered;
   final List<EventPropertyResponse> eventProperties;
 
   EventResponse({
@@ -22,6 +23,7 @@ class EventResponse with EventResponseMappable {
     required this.title,
     this.base64Image,
     this.description,
+    required this.isRegistered,
     required this.eventProperties,
   });
 

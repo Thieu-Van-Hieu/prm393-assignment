@@ -41,6 +41,11 @@ class EventResponseMapper extends ClassMapperBase<EventResponse> {
     _$description,
     opt: true,
   );
+  static bool _$isRegistered(EventResponse v) => v.isRegistered;
+  static const Field<EventResponse, bool> _f$isRegistered = Field(
+    'isRegistered',
+    _$isRegistered,
+  );
   static List<EventPropertyResponse> _$eventProperties(EventResponse v) =>
       v.eventProperties;
   static const Field<EventResponse, List<EventPropertyResponse>>
@@ -53,6 +58,7 @@ class EventResponseMapper extends ClassMapperBase<EventResponse> {
     #title: _f$title,
     #base64Image: _f$base64Image,
     #description: _f$description,
+    #isRegistered: _f$isRegistered,
     #eventProperties: _f$eventProperties,
   };
 
@@ -63,6 +69,7 @@ class EventResponseMapper extends ClassMapperBase<EventResponse> {
       title: data.dec(_f$title),
       base64Image: data.dec(_f$base64Image),
       description: data.dec(_f$description),
+      isRegistered: data.dec(_f$isRegistered),
       eventProperties: data.dec(_f$eventProperties),
     );
   }
