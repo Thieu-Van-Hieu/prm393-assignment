@@ -33,6 +33,9 @@ dependencies:
   hooks_riverpod: ^3.2.0
   flutter_hooks: ^0.21.3+1
   intl: ^0.20.2
+  multicast_dns: ^0.3.3+1
+  nsd: ^5.0.1
+  network_info_plus: ^8.2.0
 
 dev_dependencies:
   flutter_test:

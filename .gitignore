@@ -1,6 +1,6 @@
 # 1. Bỏ qua toàn bộ mọi thứ mặc định
-*
-!*/
+**/*
+!**/
 
 # 2. Giữ lại các cấu hình Git và cấu trúc gốc
 !.gitattributes

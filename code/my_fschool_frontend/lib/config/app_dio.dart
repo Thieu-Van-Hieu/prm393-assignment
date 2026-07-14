@@ -6,8 +6,27 @@ import 'package:my_fschool_frontend/util/session_manager.dart';
 class AppDio {
   static Dio? _dio;
 
-  static const String ipv4Address = '192.168.1.11';
-  static const String baseUrl = 'http://$ipv4Address:8080/api/v1';
+  static const String backendService = 'fschool-backend';
+  static String backendAddress = '192.168.1.1';
+  static String baseUrl = 'http://$backendAddress:8080/api/v1';
+
+  // --- THÊM HÀM NÀY VÀO CLASS CỦA BẠN ---
+  static void updateBaseUrl(String host, int port) {
+    // Cập nhật lại chuỗi baseUrl của class theo IP/Port tìm được từ mDNS
+    baseUrl = 'http://$host:$port/api/v1';
+
+    if (_dio != null) {
+      // Nếu client đã được khởi tạo trước đó, cập nhật trực tiếp options của nó
+      _dio!.options.baseUrl = baseUrl;
+    } else {
+      // Nếu client chưa khởi tạo, lần đầu gọi AppDio.client nó sẽ tự lấy baseUrl mới ở trên
+      client;
+    }
+
+    if (kDebugMode) {
+      print('🔄 [AppDio] Đã cập nhật Backend URL mới: $baseUrl');
+    }
+  }
 
   static Dio get client {
     if (_dio != null) return _dio!;
