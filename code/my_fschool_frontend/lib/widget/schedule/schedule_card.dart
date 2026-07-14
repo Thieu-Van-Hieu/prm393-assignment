@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_fschool_frontend/constant/app_colors.dart';
-import 'package:my_fschool_frontend/enum/attendance_status.dart';
 import 'package:my_fschool_frontend/model/response/schedule_response.dart';
 
 class ScheduleCard extends StatelessWidget {
@@ -10,19 +9,11 @@ class ScheduleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isNotYet = item.attendanceStatus == AttendanceStatus.notYet;
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isNotYet
-              ? AppColors.orangeFPT.withValues(alpha: 0.3)
-              : Colors.transparent,
-          width: isNotYet ? 1.5 : 0,
-        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.02),
@@ -44,18 +35,16 @@ class ScheduleCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: isNotYet
-                        ? AppColors.orangeFPT
-                        : AppColors.orangeFPT.withValues(alpha: 0.1),
+                    color: AppColors.orangeFPT.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     'Tiết ${item.slotNumber}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Asap',
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: isNotYet ? Colors.white : AppColors.orangeFPT,
+                      color: AppColors.orangeFPT,
                     ),
                   ),
                 ),
@@ -66,26 +55,6 @@ class ScheduleCard extends StatelessWidget {
                     fontFamily: 'Asap',
                     fontSize: 13,
                     color: Colors.grey,
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: item.attendanceStatus.bgColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    item.attendanceStatus.label,
-                    style: TextStyle(
-                      fontFamily: 'Asap',
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                      color: item.attendanceStatus.textColor,
-                    ),
                   ),
                 ),
               ],
