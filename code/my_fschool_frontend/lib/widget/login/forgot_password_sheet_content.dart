@@ -6,16 +6,17 @@ import 'package:my_fschool_frontend/widget/input/app_text_field.dart';
 class ForgotPasswordSheetContent extends StatelessWidget {
   final TextEditingController forgotPhoneController;
   final VoidCallback handleForgotPassword;
+  final GlobalKey<FormState> formKey;
 
   const ForgotPasswordSheetContent({
     super.key,
     required this.forgotPhoneController,
     required this.handleForgotPassword,
+    required this.formKey,
   });
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
       child: Column(
